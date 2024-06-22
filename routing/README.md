@@ -63,3 +63,18 @@
   + [ ] set distribute list
     + `router eigrp <as_num>`
     + `distribute-list <acl_num> out <interface>`
++ OSPF
+  + [x] DR, BDR
+  + [x] change priority, cost
+    + `ip ospf priority <val>`
+    + `ip ospf cost <val>`
+  + single area
+    + [x] AS = 1
+    + [ ] AS = 2
+  + multi area
+    + [x] Standard area
+    + [ ] Stub area
+    + [ ] Totally Stubby Area(TSA)
+    + [ ] Not-So-Stubby Area(NSSA)
+    + [ ] Totally Not-So-Stubby Area (T-NSSA)
+    + [ ] virtual link
