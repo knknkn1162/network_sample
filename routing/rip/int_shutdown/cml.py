@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from virl2_client import ClientLibrary
 from virl2_client.models.authentication import TokenAuth
 import requests
+import datetime
 
 # .envファイルの内容を読み込見込む
 load_dotenv()
@@ -51,6 +52,7 @@ class Pcap:
   def start(self, maxpackets=50):
     api_url = f"{self.endpoint}/labs/{self.lab.id}/links/{self.link.id}/capture/start"
     print(api_url)
+    print(datetime.datetime.now())
     res = requests.put(api_url,
       headers = self.headers,
       json={

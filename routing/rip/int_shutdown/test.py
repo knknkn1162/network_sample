@@ -16,7 +16,8 @@ iosv_1 = Device(tb, 'iosv_1')
 iosv_2 = Device(tb, 'iosv_2')
 
 cml0 = Cml()
-pcap = Pcap(cml0, ini.iosv_0.__name__, ini.iosv_1.__name__)
+pcap01 = Pcap(cml0, ini.iosv_0.__name__, ini.iosv_1.__name__)
+pcap12 = Pcap(cml0, ini.iosv_1.__name__, ini.iosv_2.__name__)
 
 print("####### exec #######")
 
@@ -135,7 +136,9 @@ iosv_2.execs([
 ])
 
 # shutdown
-pcap.start(maxpackets=1000)
+pcap01.start(maxpackets=1000)
+pcap12.start(maxpackets=1000)
+
 iosv_2.execs([
   [
     f"interface {ini.iosv_2.g0_1.name}",
@@ -146,12 +149,13 @@ iosv_2.execs([
 # fix the route table
 wait_until.populate_router_ping(iosv_0, ini.iosv_2.loopback0.ip_addr,
                                 sleep_time=5,
-                                hook = [
+                                hook=[
                                   f"show ip route rip",
-                                ])
+                                ]
+                                )
 
-pcap.stop()
-pcap.download(file=ini.pcap_file)
+pcap01.stop(); pcap01.download(file=ini.pcap01_file)
+pcap12.stop(); pcap12.download(file=ini.pcap12_file)
 
 iosv_0.execs([
   f"show ip protocols",
