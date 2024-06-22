@@ -47,7 +47,7 @@ Routing Information Protocol
     IP Address: 192.168.1.0, Metric: 1
 ---
 @iosv_0 -> iosv_1
-229[s]
+229[s](garbage collection timer -> 60s)
 Routing Information Protocol
     Command: Response (2)
     Version: RIPv2 (2)

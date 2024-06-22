@@ -88,21 +88,20 @@ show.mac_ip(iosv_0)
 show.mac_ip(iosv_1)
 show.mac_ip(iosv_2)
 
-#  static route settings @ iosv_0, iosv_1
-g0_1_network0 = ipv4.get_network0(ini.iosv_0.g0_1.ip_addr, ini.iosv_0.g0_1.subnet_mask)
+# static route settings @ iosv_0, iosv_1
 iosv_0.execs([
   [
-    # <network> <subnet_mask> <next-hop>
-    f"ip route {g0_1_network0} {ini.iosv_0.g0_1.subnet_mask} {ini.iosv_1.g0_0.ip_addr}"
+    # default route
+    f"ip route 0.0.0.0 0.0.0.0 {ini.iosv_0.g0_1.name}"
   ],
   f"show ip route",
 ])
 
-g0_0_network0 = ipv4.get_network0(ini.iosv_1.g0_0.ip_addr, ini.iosv_1.g0_0.subnet_mask)
+g0_0_network0 = ipv4.get_network0(ini.iosv_0.g0_0.ip_addr, ini.iosv_0.g0_0.subnet_mask)
 iosv_1.execs([
   [
     # <network> <subnet_mask> <next-hop>
-    f"ip route {g0_0_network0} {ini.iosv_1.g0_0.subnet_mask} {ini.iosv_0.g0_1.ip_addr}"
+    f"ip route {g0_0_network0} {ini.iosv_0.g0_0.subnet_mask} {ini.iosv_0.g0_1.ip_addr}"
   ],
   f"show ip route",
 ])
@@ -146,7 +145,7 @@ iosv_2.execs([
 iosv_1.execs([
   [
     f"router rip",
-    f"redistribute static",
+    f"redistribute static metric 1",
   ]
 ])
 
