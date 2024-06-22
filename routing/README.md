@@ -68,6 +68,10 @@
   + [x] change priority, cost
     + `ip ospf priority <val>`
     + `ip ospf cost <val>`
+  + advertise default route
+    + `default-information originate`
+  + passive interface
+    + `passive-interface <interface>`
   + single area
     + [x] AS = 1
     + [ ] AS = 2
