@@ -82,3 +82,11 @@
     + [ ] Not-So-Stubby Area(NSSA)
     + [ ] Totally Not-So-Stubby Area (T-NSSA)
     + [ ] virtual link
++ BGP
+  + [ ] eBGP peer
+  + [ ] iBGP peer
+  + [ ] best path
+  + [ ] redistribute
+  + [ ] route summary
+  + [ ] route reflector
+  + [ ] confederation
