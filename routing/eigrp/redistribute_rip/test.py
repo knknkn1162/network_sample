@@ -140,8 +140,8 @@ wait_until.populate_server_ping(server_0, ini.iosv_1.g0_0.ip_addr)
 wait_until.populate_server_ping(server_1, ini.iosv_1.g0_1.ip_addr)
 show.server_ping(server_0, ini.server_1.eth0.ip_addr, count=10)
 
-wait_until.populate_eigrp(iosv_0, ini.eigrp_num, 0)
-wait_until.populate_eigrp(iosv_1, ini.eigrp_num, 1)
+wait_until.populate_protocol(iosv_0, 'eigrp', 0)
+wait_until.populate_protocol(iosv_1, 'eigrp', 1)
 wait_until.populate_rip(iosv_1, 1)
 wait_until.populate_rip(iosv_2, 0)
 
@@ -170,8 +170,8 @@ iosv_1.execs([
 ])
 
 wait_until.populate_server_ping(server_0, ini.server_1.eth0.ip_addr)
-wait_until.populate_eigrp(iosv_0, ini.eigrp_num, 2)
-wait_until.populate_eigrp(iosv_1, ini.eigrp_num, 1)
+wait_until.populate_protocol(iosv_0, 'eigrp', 2)
+wait_until.populate_protocol(iosv_1, 'eigrp', 1)
 wait_until.populate_rip(iosv_1, 1)
 wait_until.populate_rip(iosv_2, 2)
 
