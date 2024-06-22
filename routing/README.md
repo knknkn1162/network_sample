@@ -8,13 +8,13 @@
   + [x] authentication
     + `ip rip authentication key-chain <chain-name>`
     + `ip rip authentication mode md5`
-  + [ ] acl 
+  + [ ] acl
+  + [x] route poisoning(経路取り消し情報の送信)
   + [ ] split horizen
+  + [ ] poison reverse
   + [ ] hold-down timer
   + [ ] distribute default routing
     + `default-information originate`
-  + [ ] route poisoning
-  + [ ] poison reverse
   + [ ] trigger update
   + [x] check hop limit <= 15
     + `offset-list <acl-num> in/out <add-hop-count> <interface>`
@@ -23,3 +23,6 @@
   + [ ] neighbor(unicast)
     + `router rip`
     + `neighbor <address>`
+  + [ ] redistribute static
+    + `router rip`
+    + `redistribute static`
