@@ -10,12 +10,12 @@
     + `ip rip authentication mode md5`
   + [ ] acl
   + [x] route poisoning(経路取り消し情報の送信)
-  + [ ] split horizen
-  + [ ] poison reverse
+  + [x] split horizen
+  + [x] poison reverse
   + [ ] hold-down timer
   + [ ] distribute default routing
     + `default-information originate`
-  + [ ] trigger update
+  + [ ] triggered update
   + [x] check hop limit <= 15
     + `offset-list <acl-num> in/out <add-hop-count> <interface>`
   + [x] passive interface
@@ -23,9 +23,9 @@
   + [ ] neighbor(unicast)
     + `router rip`
     + `neighbor <address>`
-  + [ ] redistribute static
+  + [x] redistribute static
     + `router rip`
-    + `redistribute static`
+    + `redistribute static metric 1`
 + EIGRP
   + [ ] authentication
     + `ip authentication key-chain eigrp <as_num> <chain-name>`
