@@ -1,4 +1,5 @@
 SUBNET_MASK_24 = "255.255.255.0"
+INVERSE_MASK_24 = "0.0.0.255"
 pcap_file = "test.pcap"
 class iosv_0:
    class g0_0:

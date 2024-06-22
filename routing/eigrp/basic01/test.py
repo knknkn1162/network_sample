@@ -217,6 +217,7 @@ wait_until.seconds(15)
 
 iosv_0.execs([
   f"show ip protocols",
+  f"show ip eigrp interfaces",
   f"show ip eigrp neighbors detail",
   f"show ip route eigrp",
   f"show ip eigrp topology",
@@ -225,6 +226,7 @@ iosv_0.execs([
 
 iosv_1.execs([
   f"show ip protocols",
+  f"show ip eigrp interfaces",
   f"show ip eigrp neighbors detail",
   f"show ip route eigrp",
   f"show ip eigrp topology",
@@ -233,6 +235,7 @@ iosv_1.execs([
 
 iosv_2.execs([
   f"show ip protocols",
+  f"show ip eigrp interfaces",
   f"show ip eigrp neighbors detail",
   f"show ip route eigrp",
   f"show ip eigrp topology",

@@ -105,6 +105,7 @@ iosv_0.execs([
   [
     f"router rip",
     f"version 2",
+    # error to set network {g0_0_ipv4.network[0]} {ini.INVERSE_MASK_24}
     f"network {g0_0_ipv4.network[0]}",
     f"network {g0_1_ipv4.network[0]}",
     f"no auto-summary",
