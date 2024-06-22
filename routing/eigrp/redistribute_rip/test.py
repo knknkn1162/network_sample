@@ -119,7 +119,6 @@ iosv_1.execs([
     f"version 2",
     f"network {g0_1_network0}",
     f"no auto-summary",
-    f"passive-interface {ini.iosv_2.g0_1.name}",
   ],
 ])
 
@@ -132,6 +131,7 @@ iosv_2.execs([
     f"network {g0_0_network0}",
     f"network {g0_1_network0}",
     f"no auto-summary",
+    f"passive-interface {ini.iosv_2.g0_1.name}",
   ],
 ])
 
@@ -139,6 +139,11 @@ iosv_2.execs([
 wait_until.populate_server_ping(server_0, ini.iosv_1.g0_0.ip_addr)
 wait_until.populate_server_ping(server_1, ini.iosv_1.g0_1.ip_addr)
 show.server_ping(server_0, ini.server_1.eth0.ip_addr, count=10)
+
+wait_until.populate_eigrp(iosv_0, ini.eigrp_num, 0)
+wait_until.populate_eigrp(iosv_1, ini.eigrp_num, 1)
+wait_until.populate_rip(iosv_1, 1)
+wait_until.populate_rip(iosv_2, 0)
 
 # check
 iosv_0.execs([
@@ -165,6 +170,10 @@ iosv_1.execs([
 ])
 
 wait_until.populate_server_ping(server_0, ini.server_1.eth0.ip_addr)
+wait_until.populate_eigrp(iosv_0, ini.eigrp_num, 2)
+wait_until.populate_eigrp(iosv_1, ini.eigrp_num, 1)
+wait_until.populate_rip(iosv_1, 1)
+wait_until.populate_rip(iosv_2, 2)
 
 # check
 iosv_0.execs([
