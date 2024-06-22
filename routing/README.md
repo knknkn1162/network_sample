@@ -56,10 +56,10 @@
       + `redistribute eigrp <as_num> metric 1`
       + `router eigrp <as_num> metric <v1> <v2> <v3> <v4> <v5>`
       + `redistribute rip`
-    + default route
+    + static route
       + `ip route 0.0.0.0 0.0.0.0 <addr>`
       + `router eigrp <as_num>`
-      + `redistribute static`
+      + `redistribute static metric 1`
   + [ ] set distribute list
     + `router eigrp <as_num>`
     + `distribute-list <acl_num> out <interface>`
