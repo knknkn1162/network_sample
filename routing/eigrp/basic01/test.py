@@ -89,8 +89,10 @@ iosv_0_g0_0_network0 = ipv4.get_network0(ini.iosv_0.g0_0.ip_addr, ini.iosv_0.g0_
 iosv_0_g0_1_network0 = ipv4.get_network0(ini.iosv_0.g0_1.ip_addr, ini.iosv_0.g0_1.subnet_mask)
 iosv_0_g0_2_network0 = ipv4.get_network0(ini.iosv_0.g0_2.ip_addr, ini.iosv_0.g0_2.subnet_mask)
 
+# metric K-value is the same by default
 iosv_0.execs([
   [
+    # eigrp_num(AS) should be the same as other routers
     f"router eigrp {ini.eigrp_num}",
     f"no auto-summary",
     f"network {iosv_0_g0_0_network0}",
