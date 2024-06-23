@@ -121,6 +121,7 @@ iosv_0.execs([
   f"show ip bgp summary",
   f"show ip route bgp",
   f"show ip bgp neighbors",
+  f"show ip bgp neighbors | include BGP state",
 ])
 
 iosv_1.execs([
@@ -130,6 +131,7 @@ iosv_1.execs([
   f"show ip bgp summary",
   f"show ip route bgp",
   f"show ip bgp neighbors",
+  f"show ip bgp neighbors | include BGP state",
 ])
 
 iosv_2.execs([
@@ -139,4 +141,5 @@ iosv_2.execs([
   f"show ip bgp summary",
   f"show ip route bgp",
   f"show ip bgp neighbors",
+  f"show ip bgp neighbors | include BGP state",
 ])
