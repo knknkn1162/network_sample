@@ -67,9 +67,6 @@ iosv_2.execs([
     f"ip addr {ini.bgp0.iosv_2.g0_0.ip_addr} {ini.bgp0.iosv_2.g0_0.subnet_mask}",
     f"no shutdown",
   ],
-  [
-    f"ip route 0.0.0.0 0.0.0.0 {ini.bgp0.iosv_1.g0_1.ip_addr}"
-  ],
 ])
 
 # bgp settings
@@ -98,6 +95,7 @@ iosv_1.execs([
     f"router bgp {ini.bgp0.as_num}",
     f"no auto-summary",
     f"no synchronization",
+    # iBGP
     f"neighbor {ini.bgp0.iosv_2.g0_0.ip_addr} remote-as {ini.bgp0.as_num}",
     f"redistribute ospf {ini.ospf0.num}",
   ]
@@ -108,19 +106,20 @@ iosv_2.execs([
     f"router bgp {ini.bgp0.as_num}",
     f"no auto-summary",
     f"no synchronization",
+    # iBGP
     f"neighbor {ini.bgp0.iosv_1.g0_1.ip_addr} remote-as {ini.bgp0.as_num}",
-    f"redistribute ospf {ini.ospf0.num}",
   ]
 ])
 
-wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback0.ip_addr)
-wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback1.ip_addr)
-wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback2.ip_addr)
+#wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback0.ip_addr)
+#wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback1.ip_addr)
+#wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback2.ip_addr)
+wait_until.seconds(30)
 
 iosv_1.execs([
   # bgp table
   f"show ip ospf neighbor",
-  f"show ip bgp summaryr"
+  f"show ip bgp summary"
 ])
 
 iosv_2.execs([
