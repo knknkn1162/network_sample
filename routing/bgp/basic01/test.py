@@ -66,6 +66,8 @@ iosv_2.execs([
   ],
 ])
 
+show.router_ping(iosv_0, ini.bgp1.iosv_2.loopback0.ip_addr)
+
 # bgp settings
 pcap01.start(maxpackets=500)
 pcap12.start(maxpackets=500)
@@ -108,13 +110,33 @@ iosv_2.execs([
   ]
 ])
 
-wait_until.seconds(20)
-iosv_0.execs([
-  # bgp table
-  f"show ip bgp",
-  f"show ip bgp summary",
-  f"show ip route bgp",
-])
+wait_until.populate_router_ping(iosv_0, ini.bgp1.iosv_2.loopback0.ip_addr)
 
 pcap01.stop(); pcap01.download(file=ini.pcap01_file)
 pcap12.stop(); pcap12.download(file=ini.pcap12_file)
+iosv_0.execs([
+  # bgp table
+  f"show ip bgp",
+  f"show ip bgp detail",
+  f"show ip bgp summary",
+  f"show ip route bgp",
+  f"show ip bgp neighbors",
+])
+
+iosv_1.execs([
+  # bgp table
+  f"show ip bgp",
+  f"show ip bgp detail",
+  f"show ip bgp summary",
+  f"show ip route bgp",
+  f"show ip bgp neighbors",
+])
+
+iosv_2.execs([
+  # bgp table
+  f"show ip bgp",
+  f"show ip bgp detail",
+  f"show ip bgp summary",
+  f"show ip route bgp",
+  f"show ip bgp neighbors",
+])
