@@ -111,9 +111,6 @@ iosv_2.execs([
   ]
 ])
 
-#wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback0.ip_addr)
-#wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback1.ip_addr)
-#wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback2.ip_addr)
 wait_until.seconds(30)
 
 iosv_1.execs([
