@@ -124,6 +124,7 @@ iosv_1.execs([
 
 iosv_2.execs([
   f"show ip bgp",
+  f"show ip route",
 ])
 
 # route summary
@@ -137,5 +138,6 @@ iosv_1.execs([
 
 wait_until.seconds(30)
 iosv_2.execs([
-  f"show ip bgp"
+  f"show ip bgp",
+  f"show ip route",
 ])
