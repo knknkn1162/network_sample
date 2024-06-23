@@ -83,6 +83,10 @@ iosv_0.execs([
     f"network {ini.ospf0.iosv_0.loopback1.ip_addr} {ini.INVERSE_MASK_32} area {area_num}",
     f"network {ini.ospf0.iosv_0.loopback2.ip_addr} {ini.INVERSE_MASK_32} area {area_num}",
   ],
+  # it's also necessary to ping back
+  [
+    f"ip route 0.0.0.0 0.0.0.0 {ini.ospf0.iosv_1.g0_0.ip_addr}",
+  ],
 ])
 
 g0_0_network0 = ipv4.get_network0(ini.ospf0.iosv_1.g0_0.ip_addr, ini.ospf0.iosv_1.g0_0.subnet_mask)
@@ -101,6 +105,7 @@ iosv_1.execs([
   ]
 ])
 
+g0_0_network0 = ipv4.get_network0(ini.ospf0.iosv_1.g0_0.ip_addr, ini.ospf0.iosv_1.g0_0.subnet_mask)
 iosv_2.execs([
   [
     f"router bgp {ini.bgp0.as_num}",
@@ -108,10 +113,14 @@ iosv_2.execs([
     f"no synchronization",
     # iBGP
     f"neighbor {ini.bgp0.iosv_1.g0_1.ip_addr} remote-as {ini.bgp0.as_num}",
-  ]
+  ],
+  # it's necessary to ping loopback
+  [
+    f"ip route {g0_0_network0} {ini.SUBNET_MASK_24} {ini.bgp0.iosv_1.g0_1.ip_addr}"
+  ],
 ])
 
-wait_until.seconds(30)
+wait_until.populate_router_ping(iosv_2, ini.ospf0.iosv_0.loopback0.ip_addr)
 
 iosv_1.execs([
   # bgp table
