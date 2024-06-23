@@ -1,0 +1,100 @@
+from genie import testbed
+from cml import CONFIG_YAML, Cml, Pcap
+from lib.device import Device
+from lib import wait, ipv4
+import ini
+import time
+import wait_until, calc
+import show
+
+tb = testbed.load(CONFIG_YAML)
+
+# switch
+
+iosv_0 = Device(tb, 'iosv_0')
+iosv_1 = Device(tb, 'iosv_1')
+
+
+cml0 = Cml()
+#pcap01 = Pcap(cml0, ini.ospf0.iosv_0.__name__, ini.bgp0.iosv_1.__name__)
+#pcap12 = Pcap(cml0, ini.bgp0.iosv_1.__name__, ini.bgp0.iosv_2.__name__)
+
+
+print("####### exec #######")
+
+# interface up
+iosv_0.execs([
+  [
+    f"interface {ini.iosv_0.g0_0.name}",
+    f"ip addr {ini.iosv_0.g0_0.ip_addr} {ini.iosv_0.g0_0.subnet_mask}",
+    f"no shutdown",
+  ],
+  [
+    f"interface {ini.iosv_0.loopback0.name}",
+    f"ip addr {ini.iosv_0.loopback0.ip_addr} {ini.iosv_0.loopback0.subnet_mask}",
+    #f"no shutdown",
+  ],
+])
+
+iosv_1.execs([
+  [
+    f"interface {ini.iosv_1.g0_0.name}",
+    f"ip addr {ini.iosv_1.g0_0.ip_addr} {ini.iosv_1.g0_0.subnet_mask}",
+    f"no shutdown",
+  ],
+  [
+    f"interface {ini.iosv_1.loopback0.name}",
+    f"ip addr {ini.iosv_1.loopback0.ip_addr} {ini.iosv_1.loopback0.subnet_mask}",
+    #f"no shutdown",
+  ],
+])
+
+# bgp and ospf
+area_num = 0
+iosv_0.execs([
+  [
+    f"router ospf {ini.ospf_num}",
+    f"network {ini.iosv_0.g0_0.ip_addr} {ini.INVERSE_MASK_32} area {area_num}",
+    f"network {ini.iosv_0.loopback0.ip_addr} {ini.INVERSE_MASK_32} area {area_num}",
+  ],
+  [
+    f"router bgp {ini.bgp_num}",
+    # ネイバーアドレスにloopbackI/Fを指定: 
+    f"neighbor {ini.iosv_1.loopback0.ip_addr} remote-as {ini.bgp_num}",
+    f"neighbor {ini.iosv_1.loopback0.ip_addr} update-source {ini.iosv_0.loopback0.name}",
+  ]
+])
+
+iosv_1.execs([
+  [
+    f"router ospf {ini.ospf_num}",
+    f"network {ini.iosv_1.g0_0.ip_addr} {ini.INVERSE_MASK_32} area {area_num}",
+    f"network {ini.iosv_1.loopback0.ip_addr} {ini.INVERSE_MASK_32} area {area_num}",
+  ],
+  [
+    f"router bgp {ini.bgp_num}",
+    f"neighbor {ini.iosv_0.loopback0.ip_addr} remote-as {ini.bgp_num}",
+    f"neighbor {ini.iosv_0.loopback0.ip_addr} update-source {ini.iosv_1.loopback0.name}",
+  ]
+])
+
+wait_until.seconds(30)
+
+iosv_0.execs([
+  f"show ip route",
+  # bgp table
+  f"show ip bgp",
+  f"show ip bgp detail",
+  f"show ip bgp summary",
+  f"show ip bgp neighbors",
+])
+
+iosv_1.execs([
+  f"show ip route",
+  # bgp table
+  f"show ip bgp",
+  f"show ip bgp detail",
+  f"show ip bgp summary",
+  f"show ip route bgp",
+  f"show ip bgp neighbors",
+])
