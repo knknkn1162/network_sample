@@ -21,15 +21,17 @@ print("####### exec #######")
 
 # interface up
 iosv_0.execs([
+  # console or vty
   [
+    f"service password-encryption",
     f"line console 0",
     f"password {ini.console_password}",
     f"login",
-  ],
-  [
-    f"service password-encryption",
-    f"enable secret {ini.enable_password}",
     f"no service password-encryption",
+  ],
+  # encrypt enable password
+  [
+    f"enable secret {ini.enable_password}",
     #f"enable password {ini.enable_password}",
   ],
   f"show running-config | include enable secret",

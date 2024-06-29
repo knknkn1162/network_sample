@@ -26,6 +26,7 @@ iosv_0.execs([
     f"username {ini.username} password {ini.password}",
     f"line console 0",
     f"login local",
+    # transport input ssh
     f"transport preferred ssh",
   ],
   [

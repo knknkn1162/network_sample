@@ -106,8 +106,11 @@ iosv_0_g0_1_network0 = ipv4.get_network0(ini.iosv_0.g0_1.ip_addr, ini.iosv_0.g0_
 area_id = 0 #backbone area
 iosv_0.execs([
   [
+    # IOSによっては、ip ospf <process_id> area <area_id>で有効かできる
+    # We don't have to set the same process id as the adj router
     f"router ospf {ini.ospf_process_id}",
     # ループバックインターフェイスでOSPFを有効にしない設定 -> 他のルータがloopback interfaceを認識しない
+    # wildcard mask
     f"network {iosv_0_g0_0_network0} {ini.INVERSE_MASK_24} area {area_id}",
     f"network {iosv_0_g0_1_network0} {ini.INVERSE_MASK_24} area {area_id}",
   ],
@@ -142,6 +145,7 @@ wait_until.populate_ospf(iosv_2, count=2)
 iosv_0.execs([
   # neighbor table
   f"show running-config | section router ospf {ini.ospf_process_id}",
+  # routerid, Priority, State, Address, interface
   f"show ip ospf neighbor",
   # LSDB(topology)
   f"show ip ospf database",
