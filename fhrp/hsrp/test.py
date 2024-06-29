@@ -149,7 +149,7 @@ iosv_1.execs([
   ],
 ])
 
-wait_until.seconds(30)
+wait_until.populate_server_ping(server_0, ini.iosv_2.loopback0.ip_addr)
 
 iosv_0.execs([
   f"show standby brief",
@@ -164,7 +164,6 @@ iosv_1.execs([
 ])
 
 server_0.execs([
-  f"ping {ini.iosv_2.loopback0.ip_addr} -c 5",
   f"arp -a",
 ])
 
@@ -176,4 +175,12 @@ iosv_0.execs([
   ],
 ])
 
-show.server_ping(server_0, ini.iosv_2.loopback0.ip_addr)
+wait_until.populate_server_ping(server_0, ini.iosv_2.loopback0.ip_addr)
+
+iosv_0.execs([
+  f"show standby brief",
+])
+
+iosv_1.execs([
+  f"show standby brief",
+])

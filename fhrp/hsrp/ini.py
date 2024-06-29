@@ -29,7 +29,7 @@ class iosv_1:
     slot = 0
     ip_addr = "192.168.1.2"
     subnet_mask = SUBNET_MASK_24
-    hsrp_priority = 100
+    hsrp_priority = iosv_0.g0_0.hsrp_priority - 10
   class g0_1:
     name = "GigabitEthernet0/1"
     slot = 1
@@ -69,5 +69,5 @@ class server_0:
    class eth0:
       name = "eth0"
       slot = 0
-      ip_addr = "192.168.1.1"
+      ip_addr = "192.168.1.10"
       subnet_mask = SUBNET_MASK_24
