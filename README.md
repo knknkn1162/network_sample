@@ -32,6 +32,35 @@ make test
     + [x] Static NAT(SNAT)
     + [x] Dynamic NAT(DNAT)
     + [x] NAPT(PAT)
++ switch
+  + vlan
+    + [x] access port
+      + `interface <int>`
+      + `switchport mode access`
+      + `switchport access vlan <vlan_num>`
+    + [x] trunk port
+      + `interface <int>`
+      + `switchport trunk encapsulation dot1q`
+      + `switchport mode trunk`
+    + [x] default gateway on switch
+      + `ip default-gateway <ip_addr>`
+    + [ ] voice vlan
+      + `switchport mode access`
+      + `switchport voice vlan <vlan_phone_num>`
+      + (`switchport access vlan <vlan2_num>`) for server
+    + [ ] DTP
+      + `switchport mode dynamic <auto/desirable>`
+    + [x] sub interface
+    + [x] VTP
+    + [x] SVI
+      + `ip routing`
+      + `interface vlan <vlan_id>`
+    + [x] routed port
+      + `ip routing`
+      + `interface <int>`
+      + `no switchport`
+  + L3 switch
+    + 
 + routing
   + RIP
     + [x] no auto-summary
