@@ -129,6 +129,7 @@ wait_until.populate_router_ping(iosv_1, ini.server_srv.eth0.ip_addr)
 
 # boundary between nat inside and nat outside
 server_0_addr0 = ipv4.get_network0(ini.server_0.eth0.ip_addr, ini.server_0.eth0.subnet_mask)
+acl_num = 1
 iosv_1.execs([
   # -[in]-> [g0_0 -> g0_1] -[out]->
   [
@@ -141,8 +142,10 @@ iosv_1.execs([
   ],
   # for permit ping from server_0 -> server_srv
   [
-    f"ip nat inside source list 1 interface {ini.iosv_isp.g0_1.name} overload",
-    f"access-list 1 permit {server_0_addr0} {ini.INVERSE_MASK_24}"
+    f"access-list {acl_num} permit {server_0_addr0} {ini.INVERSE_MASK_24}"
+    # overload: NAPT(PAT)
+    # interface {ini.iosv_isp.g0_1.name}: inside global
+    f"ip nat inside source list {acl_num} interface {ini.iosv_isp.g0_1.name} overload",
   ],
   f"show running-config | include ip nat",
   # assume that there are no items
