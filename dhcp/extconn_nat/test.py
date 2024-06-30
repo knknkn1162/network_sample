@@ -29,8 +29,11 @@ iosv_0.execs([
 
 wait_until.populate_up(iosv_0, 1)
 
-wait_until.seconds(10)
-print(calc.ip_addr(iosv_0, ini.iosv_0.g0_0.name))
+for i in range(0,100):
+  if calc.ip_addr(iosv_0, ini.iosv_0.g0_0.name) != "unassigned":
+    break
+  wait_until.seconds(4)
+
 wait_until.populate_router_ping(iosv_0, ini.public0_ip)
 
 iosv_0.execs([
