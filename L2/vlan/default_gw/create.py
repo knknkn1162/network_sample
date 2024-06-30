@@ -14,7 +14,7 @@ c0 = lab.create_node(ini.server_0.__name__, "server", 200, 400)
 c1 = lab.create_node(ini.server_1.__name__, "server", 800, 400)
 
 s0 = lab.create_node(ini.iosvl2_0.__name__, "iosvl2", 400, 400)
-
+s0.config = f"hostname {ini.iosvl2_0.__name__}"
 
 lab.create_link(
     c0.create_interface(ini.server_0.eth0.slot),

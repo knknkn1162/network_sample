@@ -4,7 +4,6 @@ INVERSE_MASK_24 = "0.0.0.255"
 public0_ip = "8.8.8.8"
 
 class iosv_0:
-  # DHCP
   class g0_0:
     name = "GigabitEthernet0/0"
     slot = 0
@@ -17,7 +16,8 @@ class iosv_0:
     subnet_mask = SUBNET_MASK_24
 
 class iosvl2_0:
-  stp_priority = 0
+  vty_password = "test9230"
+  enable_password = "test2398"
   class g0_0:
     name = "GigabitEthernet0/0"
     slot = 0
@@ -25,6 +25,7 @@ class iosvl2_0:
     name = "GigabitEthernet0/1"
     slot = 1
   class vlan1:
+    name = "vlan 1"
     ip_addr = "192.168.0.2"
     subnet_mask = SUBNET_MASK_24
 

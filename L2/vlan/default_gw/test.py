@@ -57,18 +57,48 @@ iosv_0.execs([
 
 iosvl2_0.execs([
   [
-    f"interface {ini.iosvl2_0.vlan1}",
+    f"interface {ini.iosvl2_0.vlan1.name}",
     f"ip address {ini.iosvl2_0.vlan1.ip_addr} {ini.iosvl2_0.vlan1.subnet_mask}",
     f"no shutdown"
-  ]
+  ],
+  [
+    # disable l3 switch
+    f"no ip routing",
+  ],
+  # # telnet settings
+  # [
+  #   f"line vty 0 4",
+  #   f"password {ini.iosvl2_0.vty_password}",
+  #   f"login",
+  #   f"transport input telnet",
+  #   # for auto-test, comment out
+  #   #f"enable secret {ini.iosvl2_0.enable_password}"
+  # ],
 ])
 
 wait_until.populate_up(iosv_0, 2)
+wait_until.populate_up(iosvl2_0, 3)
 
-show.server_ping(server_0, ini.server_1.eth0.ip_addr)
+server_0.execs([
+  f"telnet {ini.iosvl2_0.vlan1.ip_addr}"
+])
+
+# TODO: it should fail, but it actually works.
+server_1.execs([
+  f"timeout -sKILL 10 telnet {ini.iosvl2_0.vlan1.ip_addr}"
+])
 
 iosvl2_0.execs([
   [
     f"ip default-gateway {ini.iosv_0.g0_0.ip_addr}",
   ]
+])
+
+server_0.execs([
+  f"telnet {ini.iosvl2_0.vlan1.ip_addr}"
+])
+
+# success
+server_1.execs([
+  f"telnet {ini.iosvl2_0.vlan1.ip_addr}"
 ])
