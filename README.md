@@ -34,6 +34,7 @@ make test
     + [x] NAPT(PAT)
 + switch
   + vlan
+    + [ ] flash vlan dat
     + [x] access port
       + `interface <int>`
       + `switchport mode access`
@@ -42,6 +43,11 @@ make test
       + `interface <int>`
       + `switchport trunk encapsulation dot1q`
       + `switchport mode trunk`
+      + [ ] ISL
+        + `switchport trunk encapsulation isl`
+      + [x] IEEE 802.1Q
+        + `switchport trunk encapsulation dot1q`
+      + [ ] native vlan
     + [x] default gateway on switch
       + `ip default-gateway <ip_addr>`
     + [ ] voice vlan
@@ -50,17 +56,23 @@ make test
       + (`switchport access vlan <vlan2_num>`) for server
     + [ ] DTP
       + `switchport mode dynamic <auto/desirable>`
-    + [x] sub interface
+    + inter VLAN routing
+      + [x] Router on a stick
+        + `encapsulation <dot1q/isl> <vlan_num>`
+      + [x] sub interface
+        + `interface <int>.<sub_num>`
     + [x] VTP
-    + [x] SVI
-      + `ip routing`
-      + `interface vlan <vlan_id>`
-    + [x] routed port
-      + `ip routing`
-      + `interface <int>`
-      + `no switchport`
+      + `vtp domain <domain_name>`
+      + `vtp mode <server/transparent/client>`
   + L3 switch
-    + 
+    + inter VLAN routing
+      + [x] SVI
+        + `ip routing`
+        + `interface vlan <vlan_id>`
+      + [x] routed port
+        + `ip routing`
+        + `interface <int>`
+        + `no switchport`
 + routing
   + RIP
     + [x] no auto-summary
