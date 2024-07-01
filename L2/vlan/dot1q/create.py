@@ -1,10 +1,11 @@
-from cml import Cml
+from cml import Cml, Lab
 import ini as ini
 import time
 
 cml = Cml()
 lab = cml.lab
-print(cml.auth_token)
+print(f"token: {cml.auth_token}")
+
 r1 = lab.create_node(ini.iosvl2_1.__name__, "iosvl2", 300, 200)
 r1.config = f"hostname {ini.iosvl2_1.__name__}"
 r2 = lab.create_node(ini.iosvl2_2.__name__, "iosvl2", 500, 200)
@@ -36,10 +37,9 @@ lab.create_link(
   c4.create_interface(ini.server_4.eth0.slot)
 )
 
-
-print("end")
-print("starting..")
-lab.start()
+print("start nodes..")
+lab.start(wait=False)
+time.sleep(15)
 
 # print nodes and interfaces states:
 for node in lab.nodes():

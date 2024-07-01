@@ -13,10 +13,14 @@ class Device:
   
   def execs(self, cmds: list[str | object]):
     print(f"#### device {self.name} ####")
+    res = []
     for cmd in cmds:
       if type(cmd) is str:
-        self.conn.execute(cmd)
+        res.append(self.conn.execute(cmd))
       elif isinstance(cmd, list):
-        self.conn.configure(cmd)
+        res.append(self.conn.configure(cmd))
       else:
         Exception(f"error execs @ ${cmd}")
+    return res
+  def parse(self, cmd):
+    return self.conn.parse(cmd, continue_on_failure=True)

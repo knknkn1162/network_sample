@@ -48,13 +48,14 @@ make test
       + [x] IEEE 802.1Q
         + `switchport trunk encapsulation dot1q`
       + [ ] native vlan
+        + `switchport trunk native vlan <vlan_num>`
     + [x] default gateway on switch
       + `ip default-gateway <ip_addr>`
     + [ ] voice vlan
       + `switchport mode access`
       + `switchport voice vlan <vlan_phone_num>`
       + (`switchport access vlan <vlan2_num>`) for server
-    + [ ] DTP
+    + [x] DTP
       + `switchport mode dynamic <auto/desirable>`
     + inter VLAN routing
       + [x] Router on a stick

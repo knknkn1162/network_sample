@@ -10,9 +10,11 @@ data = yaml.safe_load(pyats_testbed)
 data['devices']['terminal_server']['credentials']['default'] = {
   "username": cml.CML_USER, 'password': cml.PASSWORD
 }
-
-del data['devices']['iosvl2_1']['credentials']
-del data['devices']['iosvl2_2']['credentials']
+for elem in ['iosv', 'iosvl2' 'iosvl2_0', 'iosvl2_1', 'iosvl2_2', 'iosvl2_3', 'iosvl2_4', 'iosvl2_5',
+             'iosv_0', 'iosv_1', 'iosv_2', 'iosv_3', 'iosv_4', 'iosv_5']:
+  if data['devices'].get(elem) is None:
+     continue
+  del data['devices'][elem]['credentials']
 
 with open(cml.CONFIG_YAML, "w") as f: 
     f.write(yaml.dump(data))
