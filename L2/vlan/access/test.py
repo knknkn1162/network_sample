@@ -98,6 +98,8 @@ iosvl2_0.execs([
   f"show interfaces trunk",
   f"show interfaces status",
   #f"show mac address-table",
+  # check there is no "vlan.dat" in iosvl2
+  f"show flash:",
 ])
 
 # test

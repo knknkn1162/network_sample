@@ -35,6 +35,7 @@ make test
 + switch
   + vlan
     + [ ] flash vlan dat
+      + only Catalyst switch
     + [x] access port
       + `interface <int>`
       + `switchport mode access`
@@ -44,7 +45,7 @@ make test
       + `switchport trunk encapsulation dot1q`
       + `switchport mode trunk`
       + [ ] ISL
-        + `switchport trunk encapsulation isl`
+        + `switchport trunk encapsulation isl`(not supported in iosvl2)
       + [x] IEEE 802.1Q
         + `switchport trunk encapsulation dot1q`
       + [ ] native vlan
