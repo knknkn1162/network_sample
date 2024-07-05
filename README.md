@@ -35,7 +35,10 @@ make test
 + switch
   + vlan
     + [ ] flash vlan dat
-      + only Catalyst switch
+      + (only Catalyst switch)
+      + `erase startup-config`
+      + `delete flash:vlan.dat`
+      + `reload`
     + [x] access port
       + `interface <int>`
       + `switchport mode access`
