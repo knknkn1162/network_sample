@@ -40,6 +40,7 @@ class Pcap:
     self.node1 = node1
     self.node2 = node2
     self.link = cml.get_link_by_nodes(node1, node2)
+    print(f"link_id: {self.link}")
     self.lab = self.cml.lab
     self.auth_token = self.cml.auth_token
     self.endpoint = f"{URL}/api/v0"
