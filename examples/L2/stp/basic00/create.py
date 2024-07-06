@@ -1,8 +1,8 @@
-from cml2 import Cml, Node
+from cml import Cml
 import ini as ini
 import time
 from logger import start_log
-start_log("cml2")
+start_log("cml")
 
 cml = Cml()
 lab = cml.lab

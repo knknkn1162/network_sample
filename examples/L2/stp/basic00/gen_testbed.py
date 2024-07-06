@@ -1,4 +1,4 @@
-from cml2 import Cml
+from cml import Cml
 
 lab = Cml().lab
 lab.gen_testbed()
