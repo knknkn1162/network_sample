@@ -2,10 +2,15 @@ from genie import testbed
 from cml import CONFIG_YAML, Cml, Pcap
 from lib.device import Device
 from lib import wait, ipv4
+import parse
 import ini
 import show
 import time
 import wait_until
+from structure.stp_info import (
+  State as StpState,
+  Role as StpRole,
+)
 
 tb = testbed.load(CONFIG_YAML)
 
@@ -39,6 +44,10 @@ server_1.execs([
   f"sudo ifconfig eth0 {ini.server_1.eth0.ip_addr} netmask {ini.server_1.eth0.subnet_mask} up",
   f"ifconfig eth0",
 ])
+
+show.mac_ip(iosvl2_0)
+show.mac_ip(iosvl2_1)
+show.mac_ip(iosvl2_2)
 
 ## switchport settings
 iosvl2_0.execs([
@@ -90,7 +99,6 @@ iosvl2_2.execs([
   ],
 ])
 
-print("cap start")
 # spanning tree settings
 pcap01.start(maxpackets=200)
 pcap12.start(maxpackets=200)
@@ -113,7 +121,24 @@ iosvl2_2.execs([
 ])
 
 wait_until.seconds(30)
-print(iosvl2_0.parse(f"show spanning-tree vlan {ini.vlan_num}"))
+result = parse.get_stp_info(iosvl2_0, ini.vlan_num, ini.iosvl2_0.g0_0.name)
+assert (result.role, result.port_state) == (StpRole.designated, StpState.forwarding)
+result = parse.get_stp_info(iosvl2_0, ini.vlan_num, ini.iosvl2_0.g0_1.name)
+assert (result.role, result.port_state) == (StpRole.designated, StpState.forwarding)
+result = parse.get_stp_info(iosvl2_0, ini.vlan_num, ini.iosvl2_0.g0_2.name)
+assert (result.role, result.port_state) == (StpRole.designated, StpState.forwarding)
+
+result = parse.get_stp_info(iosvl2_1, ini.vlan_num, ini.iosvl2_1.g0_0.name)
+assert (result.role, result.port_state) == (StpRole.root, StpState.forwarding)
+result = parse.get_stp_info(iosvl2_1, ini.vlan_num, ini.iosvl2_1.g0_1.name)
+assert (result.role, result.port_state) == (StpRole.designated, StpState.forwarding)
+
+result = parse.get_stp_info(iosvl2_2, ini.vlan_num, ini.iosvl2_2.g0_0.name)
+assert (result.role, result.port_state) == (StpRole.alternate, StpState.blocking)
+result = parse.get_stp_info(iosvl2_2, ini.vlan_num, ini.iosvl2_2.g0_1.name)
+assert (result.role, result.port_state) == (StpRole.root, StpState.forwarding)
+result = parse.get_stp_info(iosvl2_2, ini.vlan_num, ini.iosvl2_2.g0_2.name)
+assert (result.role, result.type, result.port_state) == (StpRole.designated, StpState.forwarding)
 
 pcap01.download(file=ini.pcap01_file)
 pcap12.download(file=ini.pcap12_file)

@@ -6,7 +6,7 @@ pcap20_file = "test20.pcap"
 vlan_num = 10
 
 class iosvl2_0:
-   stp_priority = 0
+   stp_priority = 4096
    class g0_0:
       name = "GigabitEthernet0/0"
       slot = 0
@@ -18,7 +18,7 @@ class iosvl2_0:
       slot = 2
 
 class iosvl2_1:
-   stp_priority = 4096
+   stp_priority = 8192
    class g0_0:
       name = "GigabitEthernet0/0"
       slot = 0
@@ -27,7 +27,7 @@ class iosvl2_1:
       slot = 1
 
 class iosvl2_2:
-   stp_priority = 8192
+   stp_priority = 12288
    class g0_0:
       name = "GigabitEthernet0/0"
       slot = 0

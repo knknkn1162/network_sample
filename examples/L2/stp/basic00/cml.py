@@ -16,6 +16,7 @@ CONTROLLER_PORT=os.environ['CONTROLLER_PORT']
 
 class Cml:
   def __init__(self):
+    print(URL, CML_USER)
     self.conn = ClientLibrary(URL, CML_USER, PASSWORD, ssl_verify=False)
     self.auth_token = TokenAuth(self.conn).token
     self.lab = self.find_or_create_lab(LAB_NAME)
