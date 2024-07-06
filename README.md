@@ -70,6 +70,7 @@ make test
       + `vtp domain <domain_name>`
       + `vtp mode <server/transparent/client>`
   + STP(IEEE 802.1D)
+    + [ ] Root
     + [ ] change topology
     + [ ] PortFast
       + `interface <int>`

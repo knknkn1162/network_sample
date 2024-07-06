@@ -1,8 +1,12 @@
 import os
 from dotenv import load_dotenv
-from virl2_client import ClientLibrary
+from virl2_client import ClientLibrary, models
 from virl2_client.models.authentication import TokenAuth
-import requests
+import requests, time
+import datetime
+import logging
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 # .envファイルの内容を読み込見込む
 load_dotenv()
@@ -18,20 +22,45 @@ class Cml:
   def __init__(self):
     self.conn = ClientLibrary(URL, CML_USER, PASSWORD, ssl_verify=False)
     self.auth_token = TokenAuth(self.conn).token
+    logger.debug(f"token: {self.auth_token}")
     self.lab = self.find_or_create_lab(LAB_NAME)
+    logger.debug(f"lab_id: {self.lab.id}")
     
   def find_or_create_lab(self, title):
     labs = self.conn.find_labs_by_title(title)
     if len(labs) == 0:
-      return self.conn.create_lab(title)
-    return labs[0]
+      return Lab(self.conn.create_lab(title))
+    return Lab(labs[0])
+
+class Lab:
+  def __init__(self, lab: models.Lab):
+    self.lab = lab
 
   def get_link_by_nodes(self, node1: str, node2: str):
-    lab = self.lab
-    return lab.get_link_by_nodes(
-      lab.get_node_by_label(node1),
-      lab.get_node_by_label(node2)
+    return self.lab.get_link_by_nodes(
+      self._get_node_by_label(node1),
+      self._get_node_by_label(node2)
     )
+  
+  def create_server(self, label: str, xpos: int, ypos: int):
+    return self._create_node(label, "server", xpos, ypos)
+  
+  def create_iosv(self, label: str, xpos: int, ypos: int):
+    return self._create_node(label, "iosv", xpos, ypos)
+  
+  def create_iosvl2(self, label: str, xpos: int, ypos: int):
+    return self._create_node(label, "iosvl2", xpos, ypos)
+  
+  def create_unmanaged_switch(self, label: str, xpos: int, ypos: int):
+    return self._create_node(label, "unmanaged_switch", xpos, ypos)
+
+  def _create_node(self, label: str, type0: str, xpos: int, ypos: int):
+    return self.lab.create_node(label, type0, xpos, ypos)
+  
+  def _get_node_by_label(self, node: str):
+    return self.lab.get_node_by_label(node)
+
+
 
 class Pcap:
   def __init__(self, cml: Cml, node1: str, node2: str):
@@ -39,6 +68,7 @@ class Pcap:
     self.node1 = node1
     self.node2 = node2
     self.link = cml.get_link_by_nodes(node1, node2)
+    logger.debug(f"link_id: {self.link.id}")
     self.lab = self.cml.lab
     self.auth_token = self.cml.auth_token
     self.endpoint = f"{URL}/api/v0"
@@ -50,7 +80,8 @@ class Pcap:
 
   def start(self, maxpackets=50):
     api_url = f"{self.endpoint}/labs/{self.lab.id}/links/{self.link.id}/capture/start"
-    print(api_url)
+    logger.info(api_url)
+    logger.info(datetime.datetime.now())
     res = requests.put(api_url,
       headers = self.headers,
       json={
@@ -58,7 +89,7 @@ class Pcap:
       }
     )
     api_url = f"{self.endpoint}/labs/{self.lab.id}/links/{self.link.id}/capture/status"
-    print(api_url)
+    logger.info(api_url)
     res = requests.get(api_url,
       headers = self.headers
     )
@@ -68,30 +99,30 @@ class Pcap:
 
   def stop(self):
     api_url = f"{self.endpoint}/labs/{self.lab.id}/links/{self.link.id}/capture/stop"
-    print(api_url)
+    logger.info(api_url)
     res = requests.put(api_url,
       headers = self.headers
     )
     return res
 
-  def _download(self, file: str):
+  def download(self, file: str):
     if self.key is None:
       raise Exception("key not found")
     api_url = f"{self.endpoint}/pcap/{self.key}"
-    print(api_url)
+    logger.info(api_url)
     res = requests.get(api_url,
       headers = self.headers
     )
     with open(file, "wb") as f:
       f.write(res.content)
-  def download(self, file: str):
-    self.stop()
-    self._download(file)
-  
+
 class Lab:
   def __init__(self, lab):
     self.lab = lab
-  
+  def start(self):
+    self.lab.start(wait=False)
+    logger.info("sleep..")
+    time.sleep(10)
   def delete_all(self):
     self.lab.stop()
     self.lab.wipe()

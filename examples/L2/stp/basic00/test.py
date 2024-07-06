@@ -3,6 +3,7 @@ from cml import CONFIG_YAML, Cml, Pcap
 from lib.device import Device
 from lib import wait, ipv4
 import ini
+import show
 import time
 import wait_until
 
@@ -39,12 +40,10 @@ server_1.execs([
   f"ifconfig eth0",
 ])
 
-
-
 ## switchport settings
 iosvl2_0.execs([
   [
-    f"interface range {ini.iosvl2_0.g0_0.name}",
+    f"interface {ini.iosvl2_0.g0_0.name}",
     f"switchport mode access",
     f"switchport access vlan {ini.vlan_num}",
   ],
@@ -62,7 +61,7 @@ iosvl2_0.execs([
 
 iosvl2_1.execs([
   [
-    f"interface range {ini.iosvl2_1.g0_0.name}",
+    f"interface {ini.iosvl2_1.g0_0.name}",
     f"switchport mode access",
     f"switchport access vlan {ini.vlan_num}",
   ],
@@ -75,7 +74,7 @@ iosvl2_1.execs([
 
 iosvl2_2.execs([
   [
-    f"interface range {ini.iosvl2_2.g0_0.name}",
+    f"interface {ini.iosvl2_2.g0_0.name}",
     f"switchport mode access",
     f"switchport access vlan {ini.vlan_num}",
   ],
@@ -91,11 +90,11 @@ iosvl2_2.execs([
   ],
 ])
 
-
+print("cap start")
 # spanning tree settings
-pcap01.start(maxpackets=500)
-pcap12.start(maxpackets=500)
-pcap20.start(maxpackets=500)
+pcap01.start(maxpackets=200)
+pcap12.start(maxpackets=200)
+pcap20.start(maxpackets=200)
 
 iosvl2_0.execs([
   [
@@ -114,18 +113,20 @@ iosvl2_2.execs([
 ])
 
 wait_until.seconds(30)
+print(iosvl2_0.parse(f"show spanning-tree vlan {ini.vlan_num}"))
+
 pcap01.download(file=ini.pcap01_file)
 pcap12.download(file=ini.pcap12_file)
 pcap20.download(file=ini.pcap20_file)
 
 iosvl2_0.execs([
-  f"show spanning-tree",
+  f"show spanning-tree vlan {ini.vlan_num}",
 ])
 
 iosvl2_1.execs([
-  f"show spanning-tree",
+  f"show spanning-tree vlan {ini.vlan_num}",
 ])
 
 iosvl2_2.execs([
-  f"show spanning-tree",
+  f"show spanning-tree vlan {ini.vlan_num}",
 ])
