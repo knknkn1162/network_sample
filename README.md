@@ -33,7 +33,33 @@ make test
     + [x] Dynamic NAT(DNAT)
     + [x] NAPT(PAT)
 + ARP
-  + `show mac address-table`
+  + [x] address table
+    + `show mac address-table`
++ serial
+  + [ ] frame relay
+    + `frame-relay switching`
+    + `interface <ser>`
+    + `clock rate <64000>`
+    + `encapsulation frame-relay`
+    + `frame-relay intf-type dce`
+    + `frame-relay route <> interface <serial_name> <>`
+    + `no shutdown`
+  + PPP
+    + [ ] PAP
+      + `username <user> password <pass>`
+      + `interface <ser>`
+      + `encapsulation ppp`
+      + `ppp authentication pap`
+      + `ppp pap sent-username <peer_user> password <peer_pass>`
+    + [ ] CHAP
+      + `username <user> password <pass>`
+      + `interface <ser>`
+      + `encapsulation ppp`
+      + `ppp authentication chap`
+      + `ppp chap hostname <peer_user>`
+  + PPPoE
+    + [ ] client
+    + [ ] server
 + security
   + [x] password
     + `line console <num>`
