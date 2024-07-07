@@ -1,7 +1,7 @@
 from lib.device import Device
 from lib import wait
 import time
-from structure.stp_info import StpInfo
+from lib.structure.stp_info import StpInfo
 
 # wait until
 def count_route_code(device: Device, code):
@@ -75,14 +75,6 @@ def get_stp_info(device: Device, vlan_num: int, interface: str):
         port_state=value2['port_state'],
         type=value2['type'],
       )
-
-def count_stp_status(device: Device, vlan_num: int, status: str, key: str):
-  res = device.parse(f"show spanning-tree vlan {vlan_num}")
-  count = 0
-  for key1, value in res['pvst']['vlans'].items():
-    for key2, value2 in value.get('interfaces', {}).items():
-      if value2.get(key1) == status:
-        count += 1
 
 def count_etherchannel(device: Device, status:str, protocol: str=None):
   res = device.parse("show etherchannel summary")

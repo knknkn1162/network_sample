@@ -73,8 +73,15 @@ class Lab:
     )
   
   def find_or_create_link(self, i1: models.Interface, i2: models.Interface) -> models.Link:
-    if i1.connected or i2.connected:
-      return i1.get_link_to(i2)
+    logger.info(f"{i1.node}:{i1} <-> {i2.node}:{i2}")
+    if i1.connected and i2.connected:
+      if i1.peer_interface.id == i2.id:
+        return i1.get_link_to(i2)
+      Exception("link error")
+    if i1.connected:
+      Exception("inconsistence: i1: o, i2: x")
+    if i2.connected:
+      Exception("inconsistence: i1: x, i2: o")
     return self.lab.create_link(i1, i2)
 
   def print_nodes(self):
@@ -107,10 +114,18 @@ class Lab:
     logger.info(f"sleep {wait_time}[s]")
     time.sleep(wait_time)
 
-  def delete_all(self, is_wipe=True):
+  def stop(self, is_wipe=True):
+    logger.info("stop")
     self.lab.stop()
     if is_wipe:
       self.lab.wipe()
+
+  def restart(self, wait_time=15, is_wipe=True):
+    self.stop(is_wipe=is_wipe)
+    self.start(wait_time=wait_time)
+
+  def delete_all(self, is_wipe=True):
+    self.stop(is_wipe=is_wipe)
     self.lab.remove()
 
   def gen_testbed(self):
@@ -129,14 +144,15 @@ class Lab:
     with open(CONFIG_YAML, "w") as f: 
         f.write(dump(data))
 
-  def create_pcap(self, node1: str, node2: str)-> Pcap:
+  def create_pcap(self, node1: str, node2: str):
     link = self.get_link_by_nodes(node1, node2)
     return Pcap(link)
 
 class Pcap:
   def __init__(self, link: models.Link):
     self.link = link
-    self.lab = self.link.lab
+    self.link_id = link.id
+    self.lab_id = self.link.lab.id
     self.endpoint = f"{URL}/api/v0"
     self.headers = {
       "Authorization": f"Bearer {auth_token}",
@@ -145,7 +161,7 @@ class Pcap:
     self.key: str = None
 
   def start(self, maxpackets=50):
-    api_url = f"{self.endpoint}/labs/{self.lab.id}/links/{self.link.id}/capture/start"
+    api_url = f"{self.endpoint}/labs/{self.lab_id}/links/{self.link_id}/capture/start"
     logger.info(api_url)
     logger.info(datetime.datetime.now())
     res = requests.put(api_url,
@@ -153,24 +169,24 @@ class Pcap:
       json={
         "maxpackets": maxpackets,
       },
-      ssl_verify = ssl_verify,
+      verify = ssl_verify,
     )
-    api_url = f"{self.endpoint}/labs/{self.lab.id}/links/{self.link.id}/capture/status"
+    api_url = f"{self.endpoint}/labs/{self.lab_id}/links/{self.link_id}/capture/status"
     logger.info(api_url)
     res = requests.get(api_url,
       headers = self.headers,
-      ssl_verify = ssl_verify,
+      verify = ssl_verify,
     )
     data = res.json()
     self.key = data.get("config", {}).get("link_capture_key", {})
     return data
 
   def stop(self):
-    api_url = f"{self.endpoint}/labs/{self.lab.id}/links/{self.link.id}/capture/stop"
+    api_url = f"{self.endpoint}/labs/{self.lab_id}/links/{self.link_id}/capture/stop"
     logger.info(api_url)
     res = requests.put(api_url,
       headers = self.headers,
-      ssl_verify = ssl_verify,
+      verify = ssl_verify,
     )
     return res
 
@@ -181,7 +197,7 @@ class Pcap:
     logger.info(api_url)
     res = requests.get(api_url,
       headers = self.headers,
-      ssl_verify = ssl_verify,
+      verify = ssl_verify,
     )
     with open(file, "wb") as f:
       f.write(res.content)

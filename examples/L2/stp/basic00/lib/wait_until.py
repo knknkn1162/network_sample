@@ -1,11 +1,7 @@
 from lib.device import Device
-from lib import wait
 import time
-import parse, show
+from . import parse, wait
 import sys
-
-# retry
-
 
 # populate
 def populate_vlan(device: Device, count: int):
@@ -34,7 +30,7 @@ def populate_static(device: Device):
 def populate_ospf(device: Device, count: int):
   @wait.retry(count=30, result=count, sleep_time=5)
   def _populate_ospf(device: Device):
-    show.ospf_neighbor(device)
+    device.show_ospf_neighbor()
     return parse.count_route_code(device, 'ospf')
   return _populate_ospf(device)
 
@@ -54,7 +50,7 @@ def populate_router_ping(device: Device, target_ip: str, sleep_time=3, hook:list
 def populate_server_ping(device: Device, target_ip: str, count=5):
   @wait.retry(count=30, result=0, sleep_time=3)
   def _server_ping(device: Device):
-    return show.server_ping(device, target_ip, count)
+    return device.server_ping(target_ip, count)
   return _server_ping(device)
 
 def populate_trunk(device: Device, count: int):
@@ -74,6 +70,12 @@ def populate_stp_blocking(device: Device, vlan_num: int, count: int):
 
 def populate_stp_forwarding(device: Device, vlan_num: int, count: int):
   return _populate_stp_status(device, vlan_num, count, status='forwarding')
+
+def populate_stp(device: Device, vlan_num: int, count: int):
+  @wait.retry(count=30, result=count, sleep_time=5)
+  def _populate_stp(device: Device):
+    return parse.count_stp_status(device, vlan_num, 'blocking') + parse.count_stp_status(device, vlan_num, 'forwarding')
+  return _populate_stp(device)
 
 def populate_etherchannel(device: Device, count: int, protocol: str):
   @wait.retry(count=30, result=count, sleep_time=5)
