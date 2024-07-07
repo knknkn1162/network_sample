@@ -93,6 +93,15 @@ make test
     + [x] Rapid PVST+
       + `spanning-tree mode rapid-pvst`
     + [ ] MSTP(Multiple Spanning Tree Protocol; IEEE 802.1s)
+  + EtherChannel
+    + [ ] load balance
+      + `port-channel load-balance <opt>`
+    + [ ] PAgP(Cisco)
+      + `channel-group <group_num> mode desirable/auto`
+      + `channel-protocol pagp`
+    + [ ] LACP(IEEE 802.3ad)
+      + `channel-group <group_num> mode active/passive`
+      + `channel-protocol lacp`
   + L3 switch
     + inter VLAN routing
       + [x] SVI
@@ -193,3 +202,7 @@ make test
     + [ ] route summary
     + [ ] route reflector
     + [ ] confederation
++ FHRP(First Hop Redandancy Protocol)
+  + HSRP(Hot Standby Router Protocol; Cisco)
+  + GLBP(ateway Load balancing Protocol; Cisco)
+  + VRRP(Virtual Router Redundancy Protocol)
