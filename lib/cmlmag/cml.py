@@ -66,11 +66,16 @@ class Lab:
     self.lab = lab
     self.id = lab.id
 
+  def get_node(self, label: str):
+    node = self.lab.get_node_by_label(label)
+    return Node(node, node.interfaces)
+
   def get_link_by_nodes(self, node1: str, node2: str) -> models.Link:
     return self.lab.get_link_by_nodes(
       self._get_node_by_label(node1),
       self._get_node_by_label(node2)
     )
+  
   
   def find_or_create_link(self, i1: models.Interface, i2: models.Interface) -> models.Link:
     logger.info(f"{i1.node}:{i1} <-> {i2.node}:{i2}")

@@ -70,27 +70,29 @@ make test
       + `vtp domain <domain_name>`
       + `vtp mode <server/transparent/client>`
   + STP(IEEE 802.1D)
-    + [ ] Root
     + [ ] change topology
-    + [ ] PortFast
+    + [x] PortFast
       + `interface <int>`
       + `spanning-tree portfast`
     + [ ] uplinkFast
       + `spanning-tree uplinkfast`
     + [ ] backboneFast
       + `spanning-tree backbonefast`
-    + [ ] BPDU guard
+    + [x] BPDU guard
       + `interface <int>`
       + `spanning-tree bpduguard enable`
     + [ ] (BPDU filtering)
       + `spanning-tree bpdufilter enable`
-    + [ ] root guard
+    + [x] root guard
       + `spanning-tree guard root`
     + [ ] loop guard
       + `spanning-tree loopguard default`
-    + [ ] RSTP(Rapid STP; IEEE 802.1w)
-    + [ ] PVST+(Per Vlan Spanning Tree+)
-    + [ ] MSTP(Multiple Spanning Tree Protocol)
+    + [x] RSTP(Rapid STP; IEEE 802.1w)
+    + [x] PVST+(Per Vlan Spanning Tree+)
+      + `spanning-tree mode pvst` (default)
+    + [x] Rapid PVST+
+      + `spanning-tree mode rapid-pvst`
+    + [ ] MSTP(Multiple Spanning Tree Protocol; IEEE 802.1s)
   + L3 switch
     + inter VLAN routing
       + [x] SVI
