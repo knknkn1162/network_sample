@@ -163,6 +163,9 @@ make test
         + `interface <int>`
         + `no switchport`
 + routing
+  + show info
+    + [x] `show ip route`
+    + [x] `show ip interface [brief]`
   + RIP
     + [x] no auto-summary
       +  `no auto-summary`
@@ -189,7 +192,7 @@ make test
     + [x] redistribute static
       + `router rip`
       + `redistribute static metric 1`
-  + EIGRP
+  + EIGRP(Cisco)
     + [ ] authentication
       + `ip authentication key-chain eigrp <as_num> <chain-name>`
       + `ip authentication mode eigrp <as_num> md5`
@@ -227,14 +230,30 @@ make test
       + `router eigrp <as_num>`
       + `distribute-list <acl_num> out <interface>`
   + OSPF
+    + show info
+      + [x] neighbor table
+        + `show ip ospf neighbor`
+      + [x] LSDB
+        + `show ip ospf database`
+      + [x] route table
+        + `show ip route`
+      + [x] show protocol info
+        + `show ip protocols`
+      + [x] check interface
+        + `show ip ospf interface <int>`
     + [x] DR, BDR
+      + [ ] restart ospf process
+        + `clear ip ospf process`
     + [x] change priority, cost
       + `ip ospf priority <val>`
       + `ip ospf cost <val>`
-    + advertise default route
+      + (`bandwidth <num>`)
+    + [ ] advertise default route
       + `default-information originate`
-    + passive interface
+    + [ ] passive interface
       + `passive-interface <interface>`
+    + [ ] MTU ignore
+      + `ip ospf mtu-ignore`
     + single area
       + [x] AS = 1
       + [ ] AS = 2
