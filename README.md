@@ -32,6 +32,31 @@ make test
     + [x] Static NAT(SNAT)
     + [x] Dynamic NAT(DNAT)
     + [x] NAPT(PAT)
++ ARP
+  + `show mac address-table`
++ security
+  + [x] password
+    + `line console <num>`
+    + `password <pass>`
+    + [x] encrypt
+      + `service password-encryption`
+  + [x] login local
+    + `username <user> [privilege <num>] password <pass>`
+    + `line console <num>`
+    + `login local`
+  + [x] enable password
+    + `enable secret <pass>`
+  + [x] disable auto logout
+    + `line console <num>`
+    + `exec-timeout 0 0`
+  + [x] ssh
+    + `ip domain-name {ini.domain_name}`
+    + `crypto key generate rsa modulus 1024`
+    + `username <username> password <pass>`
+    + `ip ssh version 2`
+    + `line vty 0 4`
+    + `transport input ssh`
+    + `login local`
 + switch
   + vlan
     + [ ] flash vlan dat
