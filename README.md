@@ -32,6 +32,36 @@ make test
     + [x] Static NAT(SNAT)
     + [x] Dynamic NAT(DNAT)
     + [x] NAPT(PAT)
++ ACL
+  + standard ACL
+    + [ ] number
+      + `access-list <num> permit/deny <src_ip> <wild_mask>`
+      + `interface <int>`
+      + `ip access-group <num> in/out`
+    + [ ] label
+      + `ip access-list standard <label>`
+      + `[<seq_num>] [ permit/deny ] <src_ip> <wild_mask>`
+      + `interface <int>`
+      + `ip access-group <label> in/out`
+  + extended ACL
+    + [ ] number
+      + `access-list <num> permit/deny <proto> <src_ip> <wild_mask> <src_port> <dst_ip> <wild_mask> <dst_port> [ established/log/log-input ]`
+      + `interface <int>`
+      + `ip access-group <num> [ in | out ]`
+    + [ ] label
+      + `ip access-list extended <label>`
+      + `[<seq_num>] permit/deny <proto> <src_ip> <wild_mask> <src_port> <dst_ip> <wild_mask> <dst_port> [ established/log/log-input ]`
+      + `interface <int>`
+      + `ip access-group <label> in/out`
+  + [ ] vty access control
+    + `line vty 0 4`
+    + `access-class <num> <in/out>`
+  + delete acl
+    + `ip access-list standard <num>/<label>`
+    + `no <seq_num>`
+  + show info
+    + [ ] `show access-lists [<num>/<label>]`
+    + [ ] `show ip interface <int>`
 + ARP
   + [x] address table
     + `show mac address-table`
