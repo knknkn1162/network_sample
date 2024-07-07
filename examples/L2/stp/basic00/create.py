@@ -1,4 +1,4 @@
-from lib.cml import Cml
+from cmlmag.cml import Cml
 import ini as ini
 import time
 

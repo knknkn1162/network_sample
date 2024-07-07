@@ -1,5 +1,5 @@
 import argparse    # 1. argparseをインポート
-from lib.cml import Cml
+from cmlmag.cml import Cml
 lab = Cml().lab
 import create, test
 from logging import getLogger, StreamHandler, DEBUG

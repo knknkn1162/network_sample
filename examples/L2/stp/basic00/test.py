@@ -1,11 +1,11 @@
 from genie import testbed
-from lib.cml import CONFIG_YAML, Cml
-from lib.device import Device
-from lib import wait, ipv4
-import lib.parse as parse
-import lib.wait_until as wait_until
+from cmlmag.cml import CONFIG_YAML, Cml
+from cmlmag.device import Device
+from cmlmag import wait, ipv4
+import cmlmag.parse as parse
+import cmlmag.wait_until as wait_until
 import ini
-from lib.structure.stp_info import (
+from cmlmag.structure.stp_info import (
   Role as StpRole
 )
 
@@ -116,7 +116,7 @@ def main():
       f"spanning-tree vlan {ini.vlan_num} priority {ini.iosvl2_2.stp_priority}",
     ]
   ])
-  
+
   wait_until.seconds(2)
   wait_until.populate_stp(iosvl2_0, ini.vlan_num, 3)
   wait_until.populate_stp(iosvl2_1, ini.vlan_num, 2)
