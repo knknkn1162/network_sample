@@ -220,6 +220,11 @@ make test
     + [x] Rapid PVST+
       + `spanning-tree mode rapid-pvst`
     + [ ] MSTP(Multiple Spanning Tree Protocol; IEEE 802.1s)
+    + [ ] show info
+      + [ ] check interface
+        + `show spanning-tree interface <interface>`
+    + [ ] debug info
+      + `debug spanning-tree events`
   + EtherChannel
     + [ ] load balance
       + `port-channel load-balance <opt>`
