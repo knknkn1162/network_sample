@@ -1,9 +1,9 @@
 SUBNET_MASK_24 = "255.255.255.0"
 INVERSE_MASK_24 = "0.0.0.255"
-pcap01 = "test01.pcap"
-pcap02 = "test02.pcap"
-pcap13 = "test13.pcap"
-pcap23 = "test23.pcap"
+pcap01_file = "test01.pcap"
+pcap02_file = "test02.pcap"
+pcap13_file = "test13.pcap"
+pcap23_file = "test23.pcap"
 vlan_num = 10
 
 class iosvl2_0:

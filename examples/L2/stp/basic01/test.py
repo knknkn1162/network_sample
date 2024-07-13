@@ -12,13 +12,13 @@ from cmlmag.structure.stp_info import (
 def main():
   tb = testbed.load(CONFIG_YAML)
   # switch
-  iosvl2_0 = Device(tb, 'iosvl2_0')
-  iosvl2_1 = Device(tb, 'iosvl2_1')
-  iosvl2_2 = Device(tb, 'iosvl2_2')
-  iosvl2_3 = Device(tb, 'iosvl2_3')
+  iosvl2_0 = Device(tb, ini.iosvl2_0.__name__)
+  iosvl2_1 = Device(tb, ini.iosvl2_1.__name__)
+  iosvl2_2 = Device(tb, ini.iosvl2_2.__name__)
+  iosvl2_3 = Device(tb, ini.iosvl2_3.__name__)
 
-  server_0 = Device(tb, 'server_0')
-  server_1 = Device(tb, 'server_1')
+  server_0 = Device(tb, ini.server_0.__name__)
+  server_1 = Device(tb, ini.server_1.__name__)
 
   print("####### exec #######")
   cml = Cml()
@@ -144,31 +144,29 @@ def main():
   wait_until.populate_stp(iosvl2_2, ini.vlan_num, 2)
   wait_until.populate_stp(iosvl2_3, ini.vlan_num, 3)
   
-  pcap01.download(maxpackets=200)
-  pcap02.download(maxpackets=200)
-  pcap13.download(maxpackets=200)
-  pcap23.download(maxpackets=200)
+  pcap01.download(file=ini.pcap01_file)
+  pcap02.download(file=ini.pcap02_file)
+  pcap13.download(file=ini.pcap13_file)
+  pcap23.download(file=ini.pcap23_file)
 
   wait_until.populate_server_ping(server_0, ini.server_1.eth0.ip_addr)
+  result0 = parse.get_stp_info(iosvl2_0, ini.vlan_num, ini.iosvl2_0.g0_0.name)
+  result1 = parse.get_stp_info(iosvl2_0, ini.vlan_num, ini.iosvl2_0.g0_1.name)
+  result2 = parse.get_stp_info(iosvl2_0, ini.vlan_num, ini.iosvl2_0.g0_2.name)
+  assert (result0.role, result1.role, result2.role) == (StpRole.designated, StpRole.designated, StpRole.designated)
 
-  # result = parse.get_stp_info(iosvl2_0, ini.vlan_num, ini.iosvl2_0.g0_0.name)
-  # assert result.role == StpRole.designated
-  # result = parse.get_stp_info(iosvl2_0, ini.vlan_num, ini.iosvl2_0.g0_1.name)
-  # assert result.role == StpRole.designated
-  # result = parse.get_stp_info(iosvl2_0, ini.vlan_num, ini.iosvl2_0.g0_2.name)
-  # assert result.role == StpRole.designated
+  result0 = parse.get_stp_info(iosvl2_1, ini.vlan_num, ini.iosvl2_1.g0_0.name)
+  result1 = parse.get_stp_info(iosvl2_1, ini.vlan_num, ini.iosvl2_1.g0_1.name)
+  assert (result0.role, result1.role) == (StpRole.root, StpRole.designated)
 
-  # result = parse.get_stp_info(iosvl2_1, ini.vlan_num, ini.iosvl2_1.g0_0.name)
-  # assert result.role == StpRole.root
-  # result = parse.get_stp_info(iosvl2_1, ini.vlan_num, ini.iosvl2_1.g0_1.name)
-  # assert result.role == StpRole.designated
+  result0 = parse.get_stp_info(iosvl2_2, ini.vlan_num, ini.iosvl2_2.g0_0.name)
+  result1 = parse.get_stp_info(iosvl2_2, ini.vlan_num, ini.iosvl2_2.g0_1.name)
+  assert (result0.role, result1.role) == (StpRole.designated, StpRole.root)
 
-  # result = parse.get_stp_info(iosvl2_2, ini.vlan_num, ini.iosvl2_2.g0_0.name)
-  # assert result.role == StpRole.root
-  # result = parse.get_stp_info(iosvl2_2, ini.vlan_num, ini.iosvl2_2.g0_1.name)
-  # assert result.role == StpRole.alternate
-  # result = parse.get_stp_info(iosvl2_2, ini.vlan_num, ini.iosvl2_2.g0_2.name)
-  # assert result.role == StpRole.designated
+  result0 = parse.get_stp_info(iosvl2_3, ini.vlan_num, ini.iosvl2_3.g0_0.name)
+  result1 = parse.get_stp_info(iosvl2_3, ini.vlan_num, ini.iosvl2_3.g0_1.name)
+  result2 = parse.get_stp_info(iosvl2_3, ini.vlan_num, ini.iosvl2_3.g0_2.name)
+  assert (result0.role, result1.role, result2.role) == (StpRole.alternate, StpRole.root, StpRole.designated)
 
   iosvl2_0.execs([
     f"show spanning-tree vlan {ini.vlan_num}",

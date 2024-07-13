@@ -76,6 +76,10 @@ class Lab:
       self._get_node_by_label(node2)
     )
   
+  def stop_link_by_nodes(self, node1: str, node2: str):
+    link = self.get_link_by_nodes(node1, node2)
+    link.stop()
+
   
   def find_or_create_link(self, i1: models.Interface, i2: models.Interface) -> models.Link:
     logger.info(f"{i1.node}:{i1} <-> {i2.node}:{i2}")
