@@ -24,14 +24,46 @@ make test
 
 + DHCP
   + [x] router as server
+    + `ip dhcp pool <pool_name>`
+    + `network <network> <subnet_mask>`
+    + `default-router <ip_addr>`
+    + [x] set expired days
+      + `lease 10` (optional)
+    + [x] set DNS server ip
+      + `dns-server {ip_addr}` (optional)
+    + `ip dhcp excluded-address <begin_addr> <end_addr>`
   + [x] router as client
+    + `ip address dhcp`
   + [x] relay agent
+    + `interface <src_interface>`
+    + `ip helper-address <dhcp_ip_addr>`
   + [ ] conflict
+  + [x] show info
+    + `show ip dhcp binding`
+    + `show ip dhcp conflict`
+    + `show dhcp lease`
 + WAN
   + NAT
     + [x] Static NAT(SNAT)
+      + `interface <int>`
+      + `ip nat inside/outside`
+      + `ip nat inside source static <inside local> <inside_global>`
     + [x] Dynamic NAT(DNAT)
+      + `interface <int>`
+      + `ip nat inside/outside`
+      + `ip nat pool <label> <start_ip> <end_ip> netmask <subnet_mask>`
+      + `ip nat inside source list <acl_num> pool <label>`
     + [x] NAPT(PAT)
+      + `interface <int>`
+      + `ip nat inside/outside`
+      + `ip nat inside source list <acl_num> interface <int_name> overload`
+    + show info
+      + [x] check NAT table
+        + `show ip nat translations`
+      + [x] show stat
+        + `show ip nat statistics`
+    + debug command
+      + `debug ip nat`
 + ACL
   + standard ACL
     + [ ] number

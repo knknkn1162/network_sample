@@ -80,6 +80,7 @@ iosv_0.execs([
     f"ip nat outside"
   ],
   [
+    # <inside local> -> <inside global>
     f"ip nat inside source static {ini.server_0.eth0.ip_addr} {inside_global_ip10}",
     f"ip nat inside source static {ini.server_1.eth0.ip_addr} {inside_global_ip11}",
   ],
