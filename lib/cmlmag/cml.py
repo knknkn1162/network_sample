@@ -19,14 +19,13 @@ CONFIG_YAML=os.environ['CONFIG_YAML']
 CONTROLLER_NAME=os.environ['CONTROLLER_NAME']
 CONTROLLER_PORT=os.environ['CONTROLLER_PORT']
 
-auth_token: str = None
 ssl_verify = False
 
 class Cml:
   def __init__(self):
     self.conn = ClientLibrary(URL, CML_USER, PASSWORD, ssl_verify=ssl_verify)
-    auth_token = TokenAuth(self.conn).token
-    logger.debug(f"token: {auth_token}")
+    self.auth_token = TokenAuth(self.conn).token
+    logger.debug(f"token: {self.auth_token}")
     self.lab = self._find_or_create_lab(LAB_NAME)
     logger.debug(f"lab_id: {self.lab.id}")
     
@@ -80,6 +79,9 @@ class Lab:
     link = self.get_link_by_nodes(node1, node2)
     link.stop()
 
+  def start_link_by_nodes(self, node1: str, node2: str):
+    link = self.get_link_by_nodes(node1, node2)
+    link.start()
   
   def find_or_create_link(self, i1: models.Interface, i2: models.Interface) -> models.Link:
     logger.info(f"{i1.node}:{i1} <-> {i2.node}:{i2}")
@@ -153,18 +155,19 @@ class Lab:
     with open(CONFIG_YAML, "w") as f: 
         f.write(dump(data))
 
-  def create_pcap(self, node1: str, node2: str):
+  def create_pcap(self, node1: str, node2: str, auth_token: str):
     link = self.get_link_by_nodes(node1, node2)
-    return Pcap(link)
+    return Pcap(link, auth_token=auth_token)
 
 class Pcap:
-  def __init__(self, link: models.Link):
+  def __init__(self, link: models.Link, auth_token: str):
     self.link = link
     self.link_id = link.id
     self.lab_id = self.link.lab.id
+    self.auth_token = auth_token
     self.endpoint = f"{URL}/api/v0"
     self.headers = {
-      "Authorization": f"Bearer {auth_token}",
+      "Authorization": f"Bearer {self.auth_token}",
       "Content-Type": "application/json"
     }
     self.key: str = None
@@ -180,12 +183,14 @@ class Pcap:
       },
       verify = ssl_verify,
     )
+    logger.debug(res.json())
     api_url = f"{self.endpoint}/labs/{self.lab_id}/links/{self.link_id}/capture/status"
     logger.info(api_url)
     res = requests.get(api_url,
       headers = self.headers,
       verify = ssl_verify,
     )
+    logger.debug(res.json())
     data = res.json()
     self.key = data.get("config", {}).get("link_capture_key", {})
     return data
@@ -197,6 +202,7 @@ class Pcap:
       headers = self.headers,
       verify = ssl_verify,
     )
+    logger.debug(res.json())
     return res
 
   def download(self, file: str):
