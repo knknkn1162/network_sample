@@ -187,7 +187,17 @@ make test
       + `vtp domain <domain_name>`
       + `vtp mode <server/transparent/client>`
   + STP(IEEE 802.1D)
-    + [ ] change topology
+    + [x] change parameter
+      + [] change root bridge
+        + `spanning-tree vlan <vlan_num> root primary`
+      + [] change path cost
+        + `spanning-tree vlan <vlan_num> cost <cost>`
+        + `spanning-tree pathcost method <short/long>`
+      + [x] change port priority
+        + `spanning-tree vlan <vlan_num> port-priority <prio>`
+    + [x] change topology
+      + [x] direct recovery
+      + [x] indirect recovery
     + [x] PortFast
       + `interface <int>`
       + `spanning-tree portfast`
@@ -205,7 +215,7 @@ make test
     + [ ] loop guard
       + `spanning-tree loopguard default`
     + [x] RSTP(Rapid STP; IEEE 802.1w)
-    + [x] PVST+(Per Vlan Spanning Tree+)
+    + [x] PVST+(Per Vlan Spanning Tree+; Cisco)
       + `spanning-tree mode pvst` (default)
     + [x] Rapid PVST+
       + `spanning-tree mode rapid-pvst`
