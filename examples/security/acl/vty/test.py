@@ -80,7 +80,7 @@ server_0.execs([
   f"telnet {ini.iosv_0.g0_0.ip_addr}",
 ])
 
-# Ctrl-C
+# accepted Ctrl-C
 server_1.execs([
   f"telnet {ini.iosv_0.g0_1.ip_addr}",
 ])
