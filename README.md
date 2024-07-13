@@ -147,6 +147,10 @@ make test
     + `login local`
 + switch
   + vlan
+    + [ ] ip address setting (only Catalyst switch?)
+      + `interface vlan 1`
+      + `ip address <ip_addr> <subnet_mask>`
+      + `no shutdown`
     + [ ] flash vlan dat
       + (only Catalyst switch)
       + `erase startup-config`
@@ -172,7 +176,7 @@ make test
       + `switchport mode access`
       + `switchport voice vlan <vlan_phone_num>`
       + (`switchport access vlan <vlan2_num>`) for server
-    + [x] DTP
+    + [x] DTP(Dynamic Trunking Protocol)
       + `switchport mode dynamic <auto/desirable>`
     + inter VLAN routing
       + [x] Router on a stick
