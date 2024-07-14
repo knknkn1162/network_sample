@@ -6,6 +6,7 @@ import requests, time
 import datetime
 import logging
 from yaml import safe_load, dump
+from typing import Self
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
@@ -59,6 +60,9 @@ class Node:
   
   def create_links(self, interfaces: list[models.Interface]) -> list[models.Interface]:
     return [self.lab.find_or_create_link(i1, i2) for i1, i2 in zip(self.interfaces, interfaces)]
+
+  def get_link_to(self, node: Self) -> Self:
+    return self.get_link_to(node)
 
 class Lab:
   def __init__(self, lab: models.Lab):

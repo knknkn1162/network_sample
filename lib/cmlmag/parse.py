@@ -61,8 +61,13 @@ def count_stp_status(device: Device, vlan_num: int, status: str):
         count += 1
   return count
 
-def get_stp_info(device: Device, vlan_num: int, interface: str):
-  res = device.parse(f"show spanning-tree vlan {vlan_num}")
+def get_stp_info(device: Device, interface: str, vlan_num: int=None):
+  command = ""
+  if vlan_num is None:
+    command = "show spanning-tree"
+  else:
+    command = f"show spanning-tree vlan {vlan_num}"
+  res = device.parse(command)
   count = 0
   proto = list(res.keys())[0]
   for key1, value in res[proto]['vlans'].items():

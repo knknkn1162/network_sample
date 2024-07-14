@@ -228,12 +228,16 @@ make test
   + EtherChannel
     + [ ] load balance
       + `port-channel load-balance <opt>`
+    + [ ] by hand
+      + `channel-group <group_num> mode on`
     + [ ] PAgP(Cisco)
       + `channel-group <group_num> mode desirable/auto`
       + `channel-protocol pagp`
     + [ ] LACP(IEEE 802.3ad)
       + `channel-group <group_num> mode active/passive`
       + `channel-protocol lacp`
+    + [x] show info
+      + show etherchannel <summary/detail>
   + L3 switch
     + inter VLAN routing
       + [x] SVI
