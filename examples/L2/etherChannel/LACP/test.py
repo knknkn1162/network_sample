@@ -82,14 +82,14 @@ def main():
     f"show etherchannel summary",
     f"show etherchannel detail",
     f"show spanning-tree",
-    f"show pagp neighbor",
+    f"show lacp neighbor",
   ])
 
   iosvl2_1.execs([
     f"show etherchannel summary",
     f"show etherchannel detail",
     f"show spanning-tree",
-    f"show pagp neighbor",
+    f"show lacp neighbor",
   ])
 
 
