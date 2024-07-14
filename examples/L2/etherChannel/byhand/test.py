@@ -61,7 +61,10 @@ def main():
   def check_stp_state(device: Device, interface: str):
     @wait.retry(count=30, result=StpState.forwarding, sleep_time=3)
     def _do(device: Device):
-      return parse.get_stp_info(device, interface).port_state
+      try:
+        return parse.get_stp_info(device, interface).port_state
+      except:
+        return None
     return _do(device)
 
   check_stp_state(iosvl2_0, ini.iosvl2_0.ether_channel.name)
@@ -71,7 +74,7 @@ def main():
   iosvl2_0.execs([
     # Po2(SU)
     f"show etherchannel summary",
-    # Mode = On
+    # Mode = Automatic/Desirable-Sl
     f"show etherchannel detail",
     f"show spanning-tree",
   ])

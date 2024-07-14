@@ -227,7 +227,7 @@ make test
       + `debug spanning-tree events`
   + EtherChannel
     + [ ] load balance
-      + `port-channel load-balance <opt>`
+      + `port-channel load-balance <(src|dst)-(mac|ip|port)>`
     + [ ] by hand
       + `channel-group <group_num> mode on`
     + [ ] PAgP(Cisco)
@@ -237,7 +237,9 @@ make test
       + `channel-group <group_num> mode active/passive`
       + `channel-protocol lacp`
     + [x] show info
-      + show etherchannel <summary/detail>
+      + `show etherchannel <summary/detail>`
+      + [x] show load balancer
+      + `show etherchannel load-balance`
   + L3 switch
     + inter VLAN routing
       + [x] SVI
