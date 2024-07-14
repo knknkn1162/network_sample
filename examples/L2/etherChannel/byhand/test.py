@@ -32,13 +32,13 @@ def main():
       f"interface {ini.iosvl2_0.g0_0.name}",
       f"switchport trunk encapsulation dot1q",
       f"switchport mode trunk",
-      f"channel-group {ini.channel_group0} mode on",
+      f"channel-group {ini.iosvl2_0.ether_channel.num} mode on",
     ],
     [
       f"interface {ini.iosvl2_0.g0_1.name}",
       f"switchport trunk encapsulation dot1q",
       f"switchport mode trunk",
-      f"channel-group {ini.channel_group0} mode on",
+      f"channel-group {ini.iosvl2_0.ether_channel.num} mode on",
     ],
   ])
 
@@ -48,13 +48,13 @@ def main():
       f"switchport trunk encapsulation dot1q",
       f"switchport mode trunk",
       # 対向のスイッチは同じgroupにする必要はない
-      f"channel-group {ini.channel_group1} mode on",
+      f"channel-group {ini.iosvl2_1.ether_channel.num} mode on",
     ],
     [
       f"interface {ini.iosvl2_1.g0_1.name}",
       f"switchport trunk encapsulation dot1q",
       f"switchport mode trunk",
-      f"channel-group {ini.channel_group1} mode on",
+      f"channel-group {ini.iosvl2_1.ether_channel.num} mode on",
     ],
   ])
 
