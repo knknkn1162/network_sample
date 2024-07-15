@@ -366,6 +366,14 @@ make test
     + [ ] confederation
 + FHRP(First Hop Redandancy Protocol)
   + HSRP(Hot Standby Router Protocol; Cisco)
+    + [x] basic settings
+      + `interface <int>`
+      + `standby <group_num> ip <ip_addr>`
+      + `standby <group_num> priority <prio>`
+      + `standby <group_num> preempt`
+      + `standby <group_num> track <interface> decrement <num>`
+    + show info
+      + `show standby (brief)`
   + GLBP(ateway Load balancing Protocol; Cisco)
   + VRRP(Virtual Router Redundancy Protocol)
 + ipv6
