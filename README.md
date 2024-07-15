@@ -368,3 +368,45 @@ make test
   + HSRP(Hot Standby Router Protocol; Cisco)
   + GLBP(ateway Load balancing Protocol; Cisco)
   + VRRP(Virtual Router Redundancy Protocol)
++ ipv6
+  + [x] set link local unicast
+    + [x] auto
+      + `ipv6 enable`
+    + [x] manually
+      + `ipv6 address <addr> link-local`
+  + [x] set global unicast
+    + [x] auto(SLAAC: StateLess Address Auto Configuration)
+      + `ipv6 address autoconfig`
+      + [ ] NDP(Neibor Discovery Protocol)
+    + [x] auto(only interface ID) by eui-64
+      + `ipv6 address <addr>/<prefix_len> eui-64`
+    + [x] manually
+      + `ipv6 address <addr>/<prefix_len>`
+  + show info
+    + [x] ipv6
+      + `show ipv6 interface <int>`
+    + [x] routing table
+      + `show ipv6 route`
+  + routing
+    + [x] enable IPv6 routing
+      + `ipv6 unicast-routing`
+    + [x] static routing
+      + `ipv6 route <prefix>/<len> <dst_ipv6>`
+    + [x] default route
+      + `ipv6 route ::/0 <dst_ipv6>`
+  + migration
+    + [ ] dual stack
+    + [ ] translator
+      + [ ] NAT-PT
+        + `ipv6 nat prefix <subnet>/<prefix_len>`
+    + tunneling
+      + manual
+        + [ ] IPv6
+          + `tunnel mode ipv6ip`
+        + [ ] GRE
+          + `tunnel mode gre ip`
+      + auto
+        + [ ] 6to4
+          + `tunnel mode ipv6ip 6to4`
+        + [ ] ISATAP
+          + `tunnel mode ipv6ip isatap`
