@@ -83,6 +83,11 @@ class Lab:
     link = self.get_link_by_nodes(node1, node2)
     link.stop()
 
+  def remove_link_by_nodes(self, node1: str, node2: str):
+    link = self.get_link_by_nodes(node1, node2)
+    link.stop()
+    link.remove()
+
   def start_link_by_nodes(self, node1: str, node2: str):
     link = self.get_link_by_nodes(node1, node2)
     link.start()

@@ -249,6 +249,11 @@ make test
         + `ip routing`
         + `interface <int>`
         + `no switchport`
+    + [x] etherChannel
+      + (`ip routing`)
+      + `no switchport`
+      + `channel-group <group_num> mode desirable/auto`
+      + `channel-protocol pagp`
 + routing
   + show info
     + [x] `show ip route`
