@@ -7,16 +7,16 @@ build: destroy create testbed
 rtest: restart test
 
 create:
-	python create.py
+	python main.py --create
 
 testbed:
-	python gen_testbed.py
+	python main.py --testbed
 
 test:
-	python test.py | tee $(LOGFILE)
+	python main.py --test | tee $(LOGFILE)
 
 restart:
-	python restart.py
+	python main.py --restart
 
 destroy:
-	python destroy.py
+	python main.py --destroy
