@@ -10,7 +10,7 @@ class channel0:
 class channel1:
    num = 2
    name = "Port-channel2"
-   ip_addr = "192.168.1.1"
+   ip_addr = "192.168.1.2"
    subnet_mask = SUBNET_MASK_24
 
 class iosvl2_0:

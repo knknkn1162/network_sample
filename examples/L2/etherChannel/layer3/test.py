@@ -20,17 +20,17 @@ def main():
   cml = Cml()
   pcap01 = cml.lab.create_pcap(iosvl2_0.name, iosvl2_1.name, auth_token=cml.auth_token)
 
-  # iosvl2_0.execs([
-  #   [
-  #     "ip routing",
-  #   ]
-  # ])
+  iosvl2_0.execs([
+    [
+      "ip routing",
+    ]
+  ])
 
-  # iosvl2_1.execs([
-  #   [
-  #     "ip routing",
-  #   ]
-  # ])
+  iosvl2_1.execs([
+    [
+      "ip routing",
+    ]
+  ])
 
   iosvl2_0.show_mac_ip()
   iosvl2_1.show_mac_ip()
@@ -55,8 +55,9 @@ def main():
     ],
     [
       f"interface {ini.iosvl2_0.ether_channel.name}",
+      f"no switchport",
       f"ip addr {ini.iosvl2_0.ether_channel.ip_addr} {ini.iosvl2_0.ether_channel.subnet_mask}",
-      #f"no shutdown",
+      f"no shutdown",
     ],
   ])
 
@@ -78,8 +79,9 @@ def main():
     ],
     [
       f"interface {ini.iosvl2_1.ether_channel.name}",
+      f"no switchport",
       f"ip addr {ini.iosvl2_1.ether_channel.ip_addr} {ini.iosvl2_1.ether_channel.subnet_mask}",
-      #f"no shutdown",
+      f"no shutdown",
     ],
   ])
 
@@ -92,6 +94,7 @@ def main():
     f"show etherchannel detail",
     f"show spanning-tree",
     f"show lacp neighbor",
+    f"show interfaces {ini.iosvl2_0.ether_channel.name}"
   ])
 
   iosvl2_1.execs([
@@ -99,7 +102,10 @@ def main():
     f"show etherchannel detail",
     f"show spanning-tree",
     f"show lacp neighbor",
+    f"show interfaces {ini.iosvl2_1.ether_channel.name}"
   ])
+
+  wait_until.populate_router_ping(iosvl2_0, ini.iosvl2_1.ether_channel.ip_addr)
 
 if __name__ == '__main__':
   main()
