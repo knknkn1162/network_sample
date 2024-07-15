@@ -6,8 +6,8 @@ def main():
     cml = Cml()
     lab = cml.lab
 
-    r0 = lab.create_iosv(ini.iosv_0.__name__, 600, 200, slots=2)
-    
+    r0 = lab.create_iosv(ini.iosv_0.__name__, 500, 200, slots=2)
+    #r1 = lab.create_iosv(ini.iosv_0.__name__, 600, 200, slots=2)
     c0 = lab.create_server(ini.server_0.__name__, 200, 400, slots=1)
     c1 = lab.create_server(ini.server_1.__name__, 800, 400, slots=1)
 

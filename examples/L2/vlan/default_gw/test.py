@@ -60,10 +60,10 @@ def main():
   ])
 
   iosvl2_0.execs([
-    [
-      # disable l3 switch
-      f"no ip routing",
-    ],
+    # [
+    #   # disable l3 switch
+    #   f"no ip routing",
+    # ],
     # set ip
     [
       f"interface {ini.iosvl2_0.vlan1.name}",
@@ -84,14 +84,23 @@ def main():
   wait_until.populate_up(iosv_0, 2)
   wait_until.populate_up(iosvl2_0, 3)
 
-  server_0.server_ping(ini.server_1.eth0.ip_addr)
+  # it fails
+  assert server_1.server_ping(ini.iosvl2_0.vlan1.ip_addr, count=10) != 0
   iosvl2_0.execs([
     [
       f"ip default-gateway {ini.iosv_0.g0_0.ip_addr}",
     ]
   ])
 
-  server_0.server_ping(ini.server_1.eth0.ip_addr, count=30)
+  def populate_server_ping(device: Device, target_ip: str, count=5):
+    @wait.retry(count=30, result=0, sleep_time=3)
+    def _do(device: Device):
+      return device.server_ping(target_ip, count)
+    return _do(device)
+
+  #server_1.server_ping(ini.iosvl2_0.vlan1.ip_addr, count=30)
+  populate_server_ping(server_1, ini.iosvl2_0.vlan1.ip_addr)
+
   # server_0.execs([
   #   f"telnet {ini.iosvl2_0.vlan1.ip_addr}"
   # ])

@@ -21,7 +21,10 @@ make test
 ```
 
 # TODO
-
++ interface
+  + [x] show info
+    + `show interfaces <int>`
+    + `show interfaces <status>`
 + DHCP
   + [x] router as server
     + `ip dhcp pool <pool_name>`
