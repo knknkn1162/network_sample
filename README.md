@@ -21,6 +21,9 @@ make test
 ```
 
 # TODO
++ router settings
+  + [x] `no ip domain-lookup`
+  + [x] `logging synchronous`
 + interface
   + [x] show info
     + `show interfaces <int>`

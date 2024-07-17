@@ -91,6 +91,7 @@ iosvl2_0.execs([
 # router vlan-routing
 iosv_0.execs([
   [
+    # create multiple virtual interface on a one physical interface
     f"interface {ini.iosv_0.g0_0.name}.{ini.iosv_0.g0_0.sub0.num}",
     f"encapsulation dot1q {ini.iosv_0.g0_0.sub0.vlan.num}",
     f"ip address {ini.iosv_0.g0_0.sub0.ip_addr} {ini.iosv_0.g0_0.sub0.subnet_mask}",
