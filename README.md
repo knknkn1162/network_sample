@@ -382,6 +382,8 @@ make test
       + `standby <group_num> track <interface> decrement <num>`
     + show info
       + `show standby (brief)`
+    + [x] MHSRP(Multiple HSRP)
+    + [ ] HSRP with vlan
   + GLBP(ateway Load balancing Protocol; Cisco)
   + VRRP(Virtual Router Redundancy Protocol)
 + ipv6

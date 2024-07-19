@@ -18,9 +18,10 @@ def main():
   iosv_2 = Device(tb, ini.iosv_2.__name__)
 
   server_0 = Device(tb, ini.server_0.__name__)
+  server_1 = Device(tb, ini.server_1.__name__)
   print("####### exec #######")
   cml = Cml()
-  #pcap01 = cml.lab.create_pcap(iosv_0.name, iosv_1.name, auth_token=cml.auth_token)
+  pcap = cml.lab.create_pcap("sw_0", iosv_0.name, auth_token=cml.auth_token)
 
   # server setup
   server_0.execs([
@@ -28,10 +29,20 @@ def main():
     ## disable DHCP
     f"[ -f /var/run/udhcpc.eth0.pid ] && sudo kill `cat /var/run/udhcpc.eth0.pid`",
     f"sudo ifconfig eth0 {ini.server_0.eth0.ip_addr} netmask {ini.server_0.eth0.subnet_mask} up",
-    f"sudo route add default gw {ini.hsrp0.virtual_ip_addr}",
+    f"sudo route add default gw {ini.server_0.eth0.default_gw_addr}",
     f"ifconfig eth0",
     f"route -e",
   ])
+
+  server_1.execs([
+      # eth0 setting
+      ## disable DHCP
+      f"[ -f /var/run/udhcpc.eth0.pid ] && sudo kill `cat /var/run/udhcpc.eth0.pid`",
+      f"sudo ifconfig eth0 {ini.server_1.eth0.ip_addr} netmask {ini.server_1.eth0.subnet_mask} up",
+      f"sudo route add default gw {ini.server_1.eth0.default_gw_addr}",
+      f"ifconfig eth0",
+      f"route -e",
+    ])
 
   # interface up
   iosv_0.execs([
@@ -59,7 +70,7 @@ def main():
       f"no shutdown",
     ],
   ])
-  
+
   iosv_2.execs([
     [
       f"interface {ini.iosv_2.g0_0.name}",
@@ -146,8 +157,20 @@ def main():
     ],
   ])
 
-  wait_until.populate_server_ping(server_0, ini.iosv_2.loopback0.ip_addr)
+  def populate_server_ping(device: Device, target_ip: str, count=5):
+    @wait.retry(count=30, result=0, sleep_time=3)
+    def _do(device: Device):
+      return device.server_ping(target_ip, count)
+    return _do(device)
+  populate_server_ping(server_0, ini.iosv_2.loopback0.ip_addr)
+  populate_server_ping(server_1, ini.iosv_2.loopback0.ip_addr)
 
+
+  pcap.start(maxpackets=500)
+  server_0.server_ping(ini.iosv_2.loopback0.ip_addr)
+  server_1.server_ping(ini.iosv_2.loopback0.ip_addr)
+  # 5 packets
+  pcap.download(file=ini.pcap_file)
 
 
 if __name__ == '__main__':
