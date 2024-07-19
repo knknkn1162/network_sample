@@ -218,6 +218,8 @@ make test
       + `spanning-tree bpdufilter enable`
     + [x] root guard
       + `spanning-tree guard root`
+      + [x] show info
+        + `show spanning-tree inconsistentports`
     + [ ] loop guard
       + `spanning-tree loopguard default`
     + [x] RSTP(Rapid STP; IEEE 802.1w)
