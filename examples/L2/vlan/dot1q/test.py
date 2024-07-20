@@ -53,6 +53,7 @@ server_4.execs([
 
 
 # define vlan
+# It's necessary unless iosvl2_0 and iosvl2_1 cannot recognize
 iosvl2_1.execs([
   [
     f"vlan {ini.vlan1.num}",
