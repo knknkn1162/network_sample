@@ -11,7 +11,7 @@ def main():
     r2 = lab.create_iosv(ini.iosv_0.__name__, 1000, 400, slots=2)
 
 
-    s0 = lab.create_unmanaged_switch(ini.sw_0.__name__, 400, 700, slots=4)
+    s0 = lab.create_iosvl2(ini.iosvl2_2.__name__, 400, 700, slots=4)
     c0 = lab.create_server(ini.server_0.__name__, 100, 200, slots=1)
     c1 = lab.create_server(ini.server_1.__name__, 100, 700, slots=1)
 

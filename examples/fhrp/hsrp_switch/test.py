@@ -15,6 +15,8 @@ def main():
   # switch
   iosvl2_0 = Device(tb, ini.iosvl2_0.__name__)
   iosvl2_1 = Device(tb, ini.iosvl2_1.__name__)
+  iosvl2_2 = Device(tb, ini.iosvl2_2.__name__)
+
 
   iosv_0 = Device(tb, ini.iosv_0.__name__)
 
@@ -22,7 +24,7 @@ def main():
   server_1 = Device(tb, ini.server_1.__name__)
   print("####### exec #######")
   cml = Cml()
-  pcap = cml.lab.create_pcap(iosvl2_0.name, ini.sw_0.__name__, auth_token=cml.auth_token)
+  pcap = cml.lab.create_pcap(iosvl2_0.name, iosvl2_2.name, auth_token=cml.auth_token)
 
   # server setup
   server_0.execs([
@@ -68,6 +70,12 @@ def main():
 
   iosvl2_0.execs([
     [
+      f"interface {ini.iosvl2_0.g0_0.name}",
+      f"switchport mode access",
+      f"switchport access {ini.iosvl2_0.vlan0.name}",
+      f"no shutdown",
+    ],
+    [
       "ip routing",
     ],
     # routed port
@@ -78,13 +86,19 @@ def main():
     ],
     # svi
     [
-      f"interface {ini.iosvl2_0.vlan.name}",
-      f"ip address {ini.iosvl2_0.vlan.ip_addr} {ini.iosvl2_0.vlan.subnet_mask}",
+      f"interface {ini.iosvl2_0.vlan0.name}",
+      f"ip address {ini.iosvl2_0.vlan0.ip_addr} {ini.iosvl2_0.vlan0.subnet_mask}",
       f"no shutdown",
     ],
   ])
 
   iosvl2_1.execs([
+    [
+      f"interface {ini.iosvl2_1.g0_0.name}",
+      f"switchport mode access",
+      f"switchport access {ini.iosvl2_1.vlan0.name}",
+      f"no shutdown",
+    ],
     [
       "ip routing",
     ],
@@ -96,9 +110,32 @@ def main():
     ],
     # svi
     [
-      f"interface {ini.iosvl2_1.vlan.name}",
-      f"ip address {ini.iosvl2_1.vlan.ip_addr} {ini.iosvl2_1.vlan.subnet_mask}",
+      f"interface {ini.iosvl2_1.vlan0.name}",
+      f"ip address {ini.iosvl2_1.vlan0.ip_addr} {ini.iosvl2_1.vlan0.subnet_mask}",
       f"no shutdown",
+    ],
+  ])
+
+  iosvl2_2.execs([
+    [
+      f"interface {ini.iosvl2_2.g0_0.name}",
+      f"switchport mode access",
+      f"switchport access {ini.iosvl2_2.vlan0.name}",
+    ],
+      [
+      f"interface {ini.iosvl2_2.g0_1.name}",
+      f"switchport mode access",
+      f"switchport access {ini.iosvl2_2.vlan0.name}",
+    ],
+    [
+      f"interface {ini.iosvl2_2.g0_2.name}",
+      f"switchport mode access",
+      f"switchport access {ini.iosvl2_2.vlan0.name}",
+    ],
+    [
+      f"interface {ini.iosvl2_2.g0_3.name}",
+      f"switchport mode access",
+      f"switchport access {ini.iosvl2_2.vlan0.name}",
     ],
   ])
 
@@ -117,7 +154,7 @@ def main():
       f"no auto-summary",
     ],
   ])
-  g0_0_network0 = ipv4.get_network0(ini.iosvl2_0.vlan.ip_addr, ini.iosvl2_0.vlan.subnet_mask)
+  g0_0_network0 = ipv4.get_network0(ini.iosvl2_0.vlan0.ip_addr, ini.iosvl2_0.vlan0.subnet_mask)
   g0_1_network0 = ipv4.get_network0(ini.iosvl2_0.g0_1.ip_addr, ini.iosvl2_0.g0_1.subnet_mask)
   iosvl2_0.execs([
     [
@@ -129,7 +166,7 @@ def main():
     ],
   ])
 
-  g0_0_network0 = ipv4.get_network0(ini.iosvl2_1.vlan.ip_addr, ini.iosvl2_0.vlan.subnet_mask)
+  g0_0_network0 = ipv4.get_network0(ini.iosvl2_1.vlan0.ip_addr, ini.iosvl2_0.vlan0.subnet_mask)
   g0_1_network0 = ipv4.get_network0(ini.iosvl2_1.g0_1.ip_addr, ini.iosvl2_1.g0_1.subnet_mask)
   iosvl2_1.execs([
     [
@@ -145,18 +182,19 @@ def main():
   # HSRP setting
   iosvl2_0.execs([
     [
-      f"interface {ini.iosvl2_0.vlan.name}",
+      f"interface {ini.iosvl2_0.vlan0.name}",
+      # "address is not within a subnet on this interface" warning if not svi
       f"standby {ini.hsrp0.group_id} ip {ini.hsrp0.virtual_ip_addr}",
-      f"standby {ini.hsrp0.group_id} priority {ini.iosvl2_0.vlan.hsrp0_priority}",
+      f"standby {ini.hsrp0.group_id} priority {ini.iosvl2_0.vlan0.hsrp0_priority}",
       f"standby {ini.hsrp0.group_id} preempt",
     ],
   ])
 
   iosvl2_1.execs([
     [
-      f"interface {ini.iosvl2_1.vlan.name}",
+      f"interface {ini.iosvl2_1.vlan0.name}",
       f"standby {ini.hsrp0.group_id} ip {ini.hsrp0.virtual_ip_addr}",
-      f"standby {ini.hsrp0.group_id} priority {ini.iosvl2_1.vlan.hsrp0_priority}",
+      f"standby {ini.hsrp0.group_id} priority {ini.iosvl2_1.vlan0.hsrp0_priority}",
       f"standby {ini.hsrp0.group_id} preempt",
     ],
   ])
