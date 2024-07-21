@@ -196,23 +196,23 @@ def main():
     ],
   ])
 
-  # HSRP setting
+  # GLBP setting
   iosvl2_0.execs([
     [
       f"interface {ini.iosvl2_0.vlan0.name}",
       # "address is not within a subnet on this interface" warning if not svi
-      f"standby {ini.hsrp0.group_id} ip {ini.hsrp0.virtual_ip_addr}",
-      f"standby {ini.hsrp0.group_id} priority {ini.iosvl2_0.vlan0.hsrp0_priority}",
-      f"standby {ini.hsrp0.group_id} preempt",
+      f"glbp {ini.hsrp0.group_id} ip {ini.hsrp0.virtual_ip_addr}",
+      f"glbp {ini.hsrp0.group_id} priority {ini.iosvl2_0.vlan0.hsrp0_priority}",
+      f"glbp {ini.hsrp0.group_id} preempt",
     ],
   ])
 
   iosvl2_1.execs([
     [
       f"interface {ini.iosvl2_1.vlan0.name}",
-      f"standby {ini.hsrp0.group_id} ip {ini.hsrp0.virtual_ip_addr}",
-      f"standby {ini.hsrp0.group_id} priority {ini.iosvl2_1.vlan0.hsrp0_priority}",
-      f"standby {ini.hsrp0.group_id} preempt",
+      f"glbp {ini.hsrp0.group_id} ip {ini.hsrp0.virtual_ip_addr}",
+      f"glbp {ini.hsrp0.group_id} priority {ini.iosvl2_1.vlan0.hsrp0_priority}",
+      f"glbp {ini.hsrp0.group_id} preempt",
     ],
   ])
 
@@ -232,10 +232,12 @@ def main():
   pcap.download(file=ini.pcap_file)
 
   iosvl2_0.execs([
-    f"show standby",
+    f"show glbp brief",
+    f"show glbp",
   ])
   iosvl2_1.execs([
     f"show standby",
+    f"show glbp",
   ])
 
 if __name__ == '__main__':
