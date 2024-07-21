@@ -32,8 +32,8 @@ def main():
     ## disable DHCP
     f"[ -f /var/run/udhcpc.eth0.pid ] && sudo kill `cat /var/run/udhcpc.eth0.pid`",
     f"sudo ifconfig eth0 {ini.server_0.eth0.ip_addr} netmask {ini.server_0.eth0.subnet_mask} up",
-    # set default gw to virtual address of hsrp
-    f"sudo route add default gw {ini.hsrp0.virtual_ip_addr}",
+    # set default gw to virtual address of vrrp
+    f"sudo route add default gw {ini.vrrp0.virtual_ip_addr}",
     f"ifconfig eth0",
     f"route -e",
   ])
@@ -43,8 +43,8 @@ def main():
       ## disable DHCP
       f"[ -f /var/run/udhcpc.eth0.pid ] && sudo kill `cat /var/run/udhcpc.eth0.pid`",
       f"sudo ifconfig eth0 {ini.server_1.eth0.ip_addr} netmask {ini.server_1.eth0.subnet_mask} up",
-      # set default gw to virtual address of hsrp
-      f"sudo route add default gw {ini.hsrp0.virtual_ip_addr}",
+      # set default gw to virtual address of vrrp
+      f"sudo route add default gw {ini.vrrp0.virtual_ip_addr}",
       f"ifconfig eth0",
       f"route -e",
     ])
@@ -196,23 +196,22 @@ def main():
     ],
   ])
 
-  # HSRP setting
+  # GLBP setting
   iosvl2_0.execs([
     [
       f"interface {ini.iosvl2_0.vlan0.name}",
-      # "address is not within a subnet on this interface" warning if not svi
-      f"standby {ini.hsrp0.group_id} ip {ini.hsrp0.virtual_ip_addr}",
-      f"standby {ini.hsrp0.group_id} priority {ini.iosvl2_0.vlan0.hsrp0_priority}",
-      f"standby {ini.hsrp0.group_id} preempt",
+      # master
+      f"vrrp {ini.vrrp0.group_id} ip {ini.iosvl2_0.vlan0.ip_addr}",
+      # preempt is enable by default
     ],
   ])
 
   iosvl2_1.execs([
     [
       f"interface {ini.iosvl2_1.vlan0.name}",
-      f"standby {ini.hsrp0.group_id} ip {ini.hsrp0.virtual_ip_addr}",
-      f"standby {ini.hsrp0.group_id} priority {ini.iosvl2_1.vlan0.hsrp0_priority}",
-      f"standby {ini.hsrp0.group_id} preempt",
+      # backup
+      f"vrrp {ini.vrrp0.group_id} ip {ini.iosvl2_0.vlan0.ip_addr}",
+      # preempt is enable by default
     ],
   ])
 
@@ -232,12 +231,12 @@ def main():
   pcap.download(file=ini.pcap_file)
 
   iosvl2_0.execs([
-    f"show standby brief",
-    f"show standby",
+    f"show vrrp brief",
+    f"show vrrp",
   ])
   iosvl2_1.execs([
-    f"show standby brief",
-    f"show standby",
+    f"show vrrp brief",
+    f"show vrrp",
   ])
 
 if __name__ == '__main__':

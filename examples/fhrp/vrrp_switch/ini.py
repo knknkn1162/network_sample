@@ -6,9 +6,6 @@ pcap_file = "test.pcap"
 prio_high = 110
 prio_low = 100
 vlan0_num = 10
-class glbp0:
-  group_id = 1
-  virtual_ip_addr = "192.168.1.253"
 
 class iosvl2_0:
   class g0_0:
@@ -23,7 +20,8 @@ class iosvl2_0:
     name = f"vlan {vlan0_num}"
     ip_addr = "192.168.1.100"
     subnet_mask = SUBNET_MASK_24
-    glbp0_priority = prio_high
+    hsrp0_priority = prio_high
+    #hsrp1_priority = prio_low
 
 
 class iosvl2_1:
@@ -39,7 +37,8 @@ class iosvl2_1:
     name = f"vlan {vlan0_num}"
     ip_addr = "192.168.1.101"
     subnet_mask = SUBNET_MASK_24
-    glbp0_priority = prio_low
+    hsrp0_priority = prio_low
+    #hsrp1_priority = prio_low
 
 
 class iosvl2_2:
@@ -59,7 +58,10 @@ class iosvl2_2:
     name = f"vlan {vlan0_num}"
     ip_addr = "192.168.1.102"
     subnet_mask = SUBNET_MASK_24
-    #glbp1_priority = prio_low
+
+class vrrp0:
+  group_id = 1
+  virtual_ip_addr = iosvl2_0.vlan0.ip_addr
 
 class iosv_0:
   class g0_0:
