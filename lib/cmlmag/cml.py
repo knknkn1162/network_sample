@@ -63,6 +63,13 @@ class Node:
 
   def get_link_to(self, node: Self) -> Self:
     return self.get_link_to(node)
+  
+  def stop_node(self):
+    self.node.stop(wait=True)
+
+  def remove_node(self):
+    self.stop_node()
+    self.node.remove()
 
 class Lab:
   def __init__(self, lab: models.Lab):
@@ -87,6 +94,10 @@ class Lab:
     link = self.get_link_by_nodes(node1, node2)
     link.stop()
     link.remove()
+
+  def remove_node(self, node: str):
+    n = self.get_node(node)
+    self.remove_node(n)
 
   def start_link_by_nodes(self, node1: str, node2: str):
     link = self.get_link_by_nodes(node1, node2)
@@ -119,6 +130,12 @@ class Lab:
   
   def create_unmanaged_switch(self, label: str, xpos: int, ypos: int, slots: int) -> Node:
     return self._create_node(label, "unmanaged_switch", xpos, ypos, slots)
+
+  def create_ubuntu_server(self, label: str, xpos: int, ypos: int, slots: int) -> Node:
+    return self._create_node(label, "ubuntu", xpos, ypos, slots)
+  
+  def create_external_connector(self, label: str, xpos: int, ypos: int) -> Node:
+    return self._create_node(label, "external_connector", xpos, ypos, slots=1)
 
   def _create_node(self, label: str, type0: str, xpos: int, ypos: int, slots: int) -> Node:
     node = self.lab.create_node(label, type0, xpos, ypos)
@@ -157,9 +174,11 @@ class Lab:
       "username": CML_USER,
       'password': PASSWORD,
     }
-    for key, _ in data['devices'].items():
+    for key, data0 in data['devices'].items():
       if str(key).startswith('iosv'):
         del data['devices'][key]['credentials']
+      if str(key).startswith('ubuntu'):
+        data0['type'] = 'linux'
 
     with open(CONFIG_YAML, "w") as f: 
         f.write(dump(data))
