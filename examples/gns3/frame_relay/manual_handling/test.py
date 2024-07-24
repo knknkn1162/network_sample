@@ -52,6 +52,9 @@ def main():
       f"interface {ini.r1.s1_0.name}",
       f"ip addr {ini.r1.s1_0.ip_addr} {ini.r1.s1_0.subnet_mask}",
       f"encapsulation frame-relay",
+      f"no frame-relay inverse-arp",
+      f"frame-relay map ip {ini.r1.s1_0.dlci0.peer_ip_addr} {ini.r1.s1_0.dlci0.dlci.dlci_num}",
+      f"frame-relay map ip {ini.r1.s1_0.dlci1.peer_ip_addr} {ini.r1.s1_0.dlci1.dlci.dlci_num}",
       f"no shutdown",
     ],
     [
@@ -70,6 +73,8 @@ def main():
       f"interface {ini.r2.s1_0.name}",
       f"ip addr {ini.r2.s1_0.ip_addr} {ini.r2.s1_0.subnet_mask}",
       f"encapsulation frame-relay",
+      f"no frame-relay inverse-arp",
+      f"frame-relay map ip {ini.r2.s1_0.dlci0.peer_ip_addr} {ini.r2.s1_0.dlci0.dlci.dlci_num}",
       f"no shutdown",
     ],
     [
@@ -87,6 +92,8 @@ def main():
       f"interface {ini.r3.s1_0.name}",
       f"ip addr {ini.r3.s1_0.ip_addr} {ini.r3.s1_0.subnet_mask}",
       f"encapsulation frame-relay",
+      f"no frame-relay inverse-arp",
+      f"frame-relay map ip {ini.r3.s1_0.dlci0.peer_ip_addr} {ini.r3.s1_0.dlci0.dlci.dlci_num}",
       f"no shutdown",
     ],
     [
