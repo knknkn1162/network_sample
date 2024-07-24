@@ -175,6 +175,22 @@ make test
     + `line vty 0 4`
     + `transport input ssh`
     + `login local`
+  + [ ] port security
+    + `switchport port-security`
+    + [ ] register MAC manually
+      + `switchport port-security mac-address <mac_addr>`
+    + [ ] register MAC auto
+      + `switchport port-security mac-address sticky`
+    + [ ] set behavior
+      + `switchport port-security violation <protect/restrict/shutdown>`
+      + [ ] recovery errdisable
+        + `show errdisable recovery`
+        + `errdisable recovery cause <cause>`
+    + [ ] show info
+      + `show port-security`
+      + `show port-security address`
+      + `show port-security interface <int>`
+    + [ ] DHCP snooping
 + switch(L2)
   + vlan
     + [ ] ip address setting (only Catalyst switch?)
