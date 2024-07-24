@@ -19,7 +19,7 @@ def main():
     c0.create_links([s0[1]])
     s0.create_links([c1[1], c0[0]])
     # for avoiding timeout in ubuntu
-    lab.start(wait_time=120)
+    lab.start(is_sync=True)
 
     # print nodes and interfaces states:
     lab.print_nodes()

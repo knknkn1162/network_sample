@@ -151,7 +151,7 @@ make test
     + `line vty 0 4`
     + `transport input ssh`
     + `login local`
-+ switch
++ switch(L2)
   + vlan
     + [ ] ip address setting (only Catalyst switch?)
       + `interface vlan 1`
@@ -248,6 +248,21 @@ make test
       + `show etherchannel <summary/detail>`
       + [x] show load balancer
       + `show etherchannel load-balance`
+  + CDP
+    + [x] show info
+      + `show cdp`
+      + `show cdp interface`
+      + `show cdp neighbors`
+      + `show cdp neighbors detail`
+      + `show cdp entry *`
+  + LLDP
+    + [x] enable
+      + `lldp run`
+    + [x] show info
+      + `show lldp`
+      + `show lldp neighbors`
+      + `show lldp neighbors detail`
+      + `show lldp entry *`
   + L3 switch
     + inter VLAN routing
       + [x] SVI
@@ -386,6 +401,11 @@ make test
     + [ ] HSRP with vlan
   + GLBP(ateway Load balancing Protocol; Cisco)
   + VRRP(Virtual Router Redundancy Protocol)
++ QoS
+  + IntServ
+    + [ ] RSVP(Resource reSerVation Protocol)
+  + DiffServ
+    + [ ] DSCP(Differentiated Services Code Point
 + ipv6
   + [x] set link local unicast
     + [x] auto

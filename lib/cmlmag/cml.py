@@ -145,11 +145,12 @@ class Lab:
   def _get_node_by_label(self, node: str):
     return self.lab.get_node_by_label(node)
   
-  def start(self, wait_time=15):
-    logger.info("start!")
-    self.lab.start(wait=False)
-    logger.info(f"sleep {wait_time}[s]")
-    time.sleep(wait_time)
+  def start(self, wait_time=15, is_sync=False):
+    logger.info(f"start! sync: {is_sync}")
+    self.lab.start(wait=is_sync)
+    if not is_sync:
+      logger.info(f"sleep {wait_time}[s]")
+      time.sleep(wait_time)
 
   def stop(self, is_wipe=True):
     logger.info("stop")
@@ -177,8 +178,6 @@ class Lab:
     for key, data0 in data['devices'].items():
       if str(key).startswith('iosv'):
         del data['devices'][key]['credentials']
-      if str(key).startswith('ubuntu'):
-        data0['type'] = 'linux'
 
     with open(CONFIG_YAML, "w") as f: 
         f.write(dump(data))

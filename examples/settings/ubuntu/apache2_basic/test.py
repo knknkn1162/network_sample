@@ -23,11 +23,15 @@ def main():
 
   # setup first
   ubuntu_1.execs([
-    f"sudo apt-get update",
-    f"sudo apt-get update -y apache2",
+    f"sudo apt-get update”,
+    f"sudo apt-get install -y apache2",
   ])
+  wait_until.seconds(30)
 
-  cml.lab.remove_link_by_nodes(ini.ubuntu_1.__name__, ini.ext_conn0.__name__)
+  ubuntu_1.execs([
+    "systemctl status apache",
+  ])
+  #cml.lab.remove_link_by_nodes(ini.ubuntu_1.__name__, ini.ext_conn0.__name__)
 
   # conf static ip
   ubuntu_0.execs([
@@ -41,11 +45,9 @@ network:
       dhcp4: false
       dhcp6: false
       addresses: [{ini.ubuntu_0.ens2.ip_addr}/{ini.ubuntu_0.ens2.prefix_len}]
-      routes:
-        - to: default
-          via: {ini.ubuntu_0.ens2.default_gw}
 EOF
     """,
+    f"sleep 2",
     f"sudo chmod 600 /etc/netplan/99-config.yaml",
     f"sudo netplan apply",
   ])
@@ -61,11 +63,9 @@ network:
       dhcp4: false
       dhcp6: false
       addresses: [{ini.ubuntu_1.ens3.ip_addr}/{ini.ubuntu_1.ens3.prefix_len}]
-      routes:
-        - to: default
-          via: {ini.ubuntu_1.ens3.default_gw}
 EOF
     """,
+    f"sleep 2",
     f"sudo chmod 600 /etc/netplan/99-config.yaml",
     f"sudo netplan apply",
   ])
@@ -76,7 +76,7 @@ EOF
     f"curl http://{ini.ubuntu_1.ens3.ip_addr}",
     f"echo $?",
   ])
-  assert res == 0
+  assert int(res[1]) == 0
 
 if __name__ == '__main__':
   main()
