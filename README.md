@@ -105,13 +105,37 @@ make test
     + `show mac address-table`
 + serial
   + [ ] frame relay
-    + `frame-relay switching`
-    + `interface <ser>`
-    + `clock rate <64000>`
-    + `encapsulation frame-relay`
-    + `frame-relay intf-type dce`
-    + `frame-relay route <> interface <serial_name> <>`
+    + [ ] initial setting
+    + [ ] mapping using Inverse ARP
+      + `interface {serial_interface}`
+      + `ip address {ip_addr} {subnet_mask}`
+      + `no shutdown`
+      + `encapsulation frame-relay`
+    + [ ] manual mapping
+      + `interface {serial_interface}`
+      + `no frame-relay inverse-arp`
+      + `frame-relay map ip {ip_addr} {DLCI_num}`
+    + [ ] show info
+      + [ ] show route table
+        + `show frame-relay route`
+      + [ ] show frame-relay map
+        + `show frame-relay map`
+  + [ ] ATM(Asynchronous Transfer Mode)
+    + `interface {atm_interface}`
+    + `ip add {ip_addr} {subnet_mask}`
     + `no shutdown`
+    + [ ] manual mapping
+      + `interface {atm_interface}`
+      + `pvc {vpi_num}/{vci_num}`
+      + `protocol ip {ip_addr} broadcast`
+      + `exit`
+    + [ ] mapping using Inverse ARP
+      + `interface {atm_interface}`
+      + `pvc {vpi_num}/{vci_num}`
+      + `protocol ip inarp broadcast`
+    + [ ] show atm
+      + `show atm pvc`
+      + `show atm map`
   + PPP
     + [ ] PAP
       + `username <user> password <pass>`
