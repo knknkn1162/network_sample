@@ -77,7 +77,7 @@ def main():
     ],
   ])
   
-  r2.execs([
+  r3.execs([
     [
       f"interface {ini.r3.f0_0.name}",
       f"ip addr {ini.r3.f0_0.ip_addr} {ini.r3.f0_0.subnet_mask}",
@@ -95,9 +95,21 @@ def main():
   ])
 
   wait_until.seconds(20)
-  # TODO
-  # pc3.vpcs_ping(ini.pc1.eth0.ip_addr, count=10)
-  # pc3.vpcs_ping(ini.pc2.eth0.ip_addr, count=10)
+
+  # show result
+  r1.execs([
+    f"show frame-relay map",
+  ])
+  r2.execs([
+    f"show frame-relay map",
+  ])
+  r3.execs([
+    f"show frame-relay map",
+  ])
+
+  pc2.vpcs_ping(ini.pc1.eth0.ip_addr)
+  pc2.vpcs_ping(ini.pc3.eth0.ip_addr)
+  pc1.vpcs_ping(ini.pc3.eth0.ip_addr)
 
   # show result
   r1.execs([
