@@ -51,6 +51,12 @@ class Device:
     ])
     return int(res[1].strip())
 
+  def vpcs_ping(self, target_ip: str, count: int=5):
+    res: list[str] = self.execs([
+      f"ping {target_ip} -c {count}",
+    ])
+    return res
+
   def router_ping(self, target_ip: str, count: int=5):
     res = self.execs([
       f"ping {target_ip} repeat {count}",

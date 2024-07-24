@@ -12,11 +12,6 @@ class Pvc:
   def get_vpi_vci(self)-> str:
     return f"{self.vpi}/{self.vci}"
 
-  @classmethod
-  def set_peer(pvc1: Self, pvc2: Self):
-    pvc1.peer_pvc = pvc2
-    pvc2.peer_pvc = pvc1
-
 
 pvc0 = Pvc(1,1,10)
 pvc1 = Pvc(1,2,20)

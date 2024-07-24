@@ -88,8 +88,7 @@ def main():
         f"protocol ip {ini.r2.a1_0.pvc0.peer_ip} broadcast",
       ],
       [
-        f"ip route {r1_network0} {ini.r1.f0_0.subnet_mask} {ini.r1.a1_0.ip_addr}",
-        f"ip route {r3_network0} {ini.r3.f0_0.subnet_mask} {ini.r3.a1_0.ip_addr}",
+        f"ip route 0.0.0.0 0.0.0.0 {ini.r2.a1_0.pvc0.peer_ip}",
       ],
     ])
   
@@ -111,9 +110,27 @@ def main():
       f"protocol ip {ini.r3.a1_0.pvc0.peer_ip} broadcast",
     ],
     [
-      f"ip route {r1_network0} {ini.r1.f0_0.subnet_mask} {ini.r1.a1_0.ip_addr}",
-      f"ip route {r2_network0} {ini.r2.f0_0.subnet_mask} {ini.r2.a1_0.ip_addr}",
+      f"ip route 0.0.0.0 0.0.0.0 {ini.r3.a1_0.pvc0.peer_ip}",
     ],
+  ])
+
+  wait_until.seconds(20)
+  # TODO
+  # pc3.vpcs_ping(ini.pc1.eth0.ip_addr, count=10)
+  # pc3.vpcs_ping(ini.pc2.eth0.ip_addr, count=10)
+
+  # show result
+  r1.execs([
+    f"show atm pvc",
+    f"show atm map",
+  ])
+  r2.execs([
+    f"show atm pvc",
+    f"show atm map",
+  ])
+  r3.execs([
+    f"show atm pvc",
+    f"show atm map",
   ])
 
 if __name__ == '__main__':
