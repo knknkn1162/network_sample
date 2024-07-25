@@ -23,7 +23,7 @@ def main():
 
   # setup first
   ubuntu_1.execs([
-    f"sudo apt-get update”,
+    f"sudo apt-get update",
     f"sudo apt-get install -y apache2",
   ])
   wait_until.seconds(30)

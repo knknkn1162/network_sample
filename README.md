@@ -24,6 +24,9 @@ make test
 + router settings
   + [x] `no ip domain-lookup`
   + [x] `logging synchronous`
+  + [ ] syslog
+    + `logging host <ip_addr>`
+    + `service timestamp log datetime msec`
 + interface
   + [x] show info
     + `show interfaces <int>`
