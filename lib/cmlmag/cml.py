@@ -134,11 +134,17 @@ class Lab:
   def create_ubuntu_server(self, label: str, xpos: int, ypos: int, slots: int) -> Node:
     return self._create_node(label, "ubuntu", xpos, ypos, slots)
   
-  def create_external_connector(self, label: str, xpos: int, ypos: int) -> Node:
-    return self._create_node(label, "external_connector", xpos, ypos, slots=1)
+  def create_external_connector(self, label: str, xpos: int, ypos: int, is_bridge=False) -> Node:
+    kwargs = {}
+    if is_bridge:
+      kwargs["configuration"] = {
+        "name": "default",
+        "content": "System Bridge",
+      }
+    return self._create_node(label, "external_connector", xpos, ypos, slots=1, **kwargs)
 
-  def _create_node(self, label: str, type0: str, xpos: int, ypos: int, slots: int) -> Node:
-    node = self.lab.create_node(label, type0, xpos, ypos)
+  def _create_node(self, label: str, type0: str, xpos: int, ypos: int, slots: int, **kwargs) -> Node:
+    node = self.lab.create_node(label, type0, xpos, ypos, **kwargs)
     interfaces = [node.create_interface(slot=i) for i in range(slots)]
     return Node(node, interfaces)
   
