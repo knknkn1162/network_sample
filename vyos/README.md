@@ -1,24 +1,7 @@
-# cml2_sample
+# vyos
 
-## prerequisites
-
-+ windows PC
-  + gns3 (as server)
-  + ngrok
-+ mac or linux
-  + this repo
-    + virl2_client
-    + pyats
-      + genie
-      + testbed
-      + ...
-
-
-```sh
-make all
-# or make rtest for the 2nd time
-make test
-```
++ version: 1.5
+  + 1.5-rolling-202407250716
 
 # TODO
 
