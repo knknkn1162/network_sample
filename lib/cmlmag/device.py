@@ -82,6 +82,12 @@ class Device:
       f"ping {target_ip} repeat {count}",
     ])
     return res[0]
+  
+  def vyos_ping(self, target_ip: str, count: int=5):
+    res = self.execs([
+      f"ping {target_ip} count {count}",
+    ])
+    return res[0]
 
   def show_mac_ip(self):
     return self.execs([
