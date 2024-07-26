@@ -32,7 +32,7 @@ def main():
   vyos1.vyos_execs([
     [
       f"set interfaces ethernet eth0 address {ini.vyos1.eth0.ip_addr}",
-      f"set interfaces loopback eth1 address {ini.vyos1.eth1.ip_addr}",
+      f"set interfaces ethernet eth1 address {ini.vyos1.eth1.ip_addr}",
     ],
   ])
 
@@ -46,13 +46,13 @@ def main():
   # static routing
   vyos0.vyos_execs([
     [
-      f"set protocols static route 0.0.0.0/0 next-hop {ini.vyos1.eth0.ip_addr}",
+      f"set protocols static route 0.0.0.0/0 next-hop {ini.vyos1.eth0.ip_addr.ip}",
     ]
   ])
 
   vyos2.vyos_execs([
     [
-      f"set protocols static route 0.0.0.0/0 next-hop {ini.vyos1.eth1.ip_addr}",
+      f"set protocols static route 0.0.0.0/0 next-hop {ini.vyos1.eth1.ip_addr.ip}",
     ]
   ])
 
