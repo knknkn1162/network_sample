@@ -37,7 +37,7 @@ def main():
   vyos0.vyos_execs([
     [
       f"set interfaces bridge br0",
-      f"set interfaces bridge br0 address {ini.vyos0.br0.ip_addr}",
+      #f"set interfaces bridge br0 address {ini.vyos0.br0.ip_addr}",
       f"set interfaces bridge br0 member interface eth0",
       f"set interfaces bridge br0 member interface eth1",
     ],
