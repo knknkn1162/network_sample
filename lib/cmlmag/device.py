@@ -20,21 +20,41 @@ class Device:
       return NodeType.server
     elif(self.name.startswith('switch')):
       return NodeType.unmanaged_switch
+    elif(self.name.startswith('vyos')):
+      return NodeType.vyos
     
   def is_connected(self):
     return self.conn.is_connected()
 
   def exec(self, cmd: str):
     return self.conn.execute(cmd)
+  def conf(self, cmds: list[str]):
+    return self.conn.configure(cmds)
   
   def execs(self, cmds: list[str | object]):
     print(f"#### device {self.name} ####")
     res = []
     for cmd in cmds:
       if type(cmd) is str:
-        res.append(self.conn.execute(cmd))
+        res.append(self.exec(cmd))
       elif isinstance(cmd, list):
-        res.append(self.conn.configure(cmd))
+        res.append(self.conf(cmd))
+      else:
+        Exception(f"error execs @ ${cmd}")
+    return res
+  
+  def vyos_configure(self, cmds: list[str], is_save:bool=False):
+    save_option = ["save"] if is_save else []
+    self.execs(["configure", *cmds, "commit", *save_option, "exit"])
+
+  def vyos_execs(self, cmds: list[str | object], is_save:bool=False):
+    print(f"#### device {self.name} ####")
+    res = []
+    for cmd in cmds:
+      if type(cmd) is str:
+        res.append(self.exec(cmd))
+      elif isinstance(cmd, list):
+        res.append(self.vyos_configure(cmd, is_save=is_save))
       else:
         Exception(f"error execs @ ${cmd}")
     return res
