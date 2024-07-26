@@ -8,3 +8,4 @@ class NodeType:
   unmanaged_switch = auto()
   server = auto()
   ubuntu = auto()
+  vyos = auto()
