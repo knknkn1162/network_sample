@@ -79,7 +79,7 @@ def main():
     ],
   ])
 
-  wait_until.seconds(40)
+  wait_until.seconds(60)
 
   vyos0.vyos_execs([
     f"show ip route",
