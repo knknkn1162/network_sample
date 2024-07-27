@@ -114,12 +114,8 @@ def main():
       f"ip nat inside",
       f"no shutdown",
     ],
-    # [
-    #   f"dialer-list 1 protocol ip permit",
-    # ],
     [
       f"interface {ini.iosv_2.dialer0.name}",
-      #f"dialer-group 1",
       f"ip nat outside",
     ],
     [
@@ -130,12 +126,6 @@ def main():
       f"access-list {ini.acl_num} permit {ini.iosv_2.g0_1.ip_addr.network.network_address} {ini.iosv_2.g0_1.ip_addr.hostmask}",
       f"ip nat inside source list {ini.acl_num} interface {ini.iosv_2.dialer0.name} overload",
     ]
-  ])
-
-  iosv_1.execs([
-    [
-      f"ip route 0.0.0.0 0.0.0.0 {ini.iosv_2.dialer0.assigned_ip_addr.ip}",
-    ],
   ])
 
   wait.seconds(30)
