@@ -96,6 +96,43 @@ def main():
     f"show ip interface brief",
     f"show ip route",
   ])
+
+  # PAT settings
+  server_1.execs([
+
+    f"[ -f /var/run/udhcpc.eth0.pid ] && sudo kill `cat /var/run/udhcpc.eth0.pid`",
+    f"sudo ifconfig eth0 {ini.server_1.eth0.ip_addr.ip} netmask {ini.server_1.eth0.ip_addr.netmask} up",
+    f"sudo route add default gw {ini.iosv_2.g0_1.ip_addr.ip}",
+    f"ifconfig eth0",
+    f"route -e",
+  ])
+
+  iosv_2.execs([
+    [
+      f"interface {ini.iosv_2.g0_1.name}",
+      f"ip address {ini.iosv_2.g0_1.ip_addr.ip} {ini.iosv_2.g0_1.ip_addr.netmask}",
+      f"ip nat inside",
+      f"no shutdown",
+    ],
+    [
+      f"interface {ini.iosv_2.dialer0.name}",
+      f"ip nat outside",
+    ],
+    [
+      f"ip route 0.0.0.0 0.0.0.0 {ini.iosv_2.dialer0.name}",
+    ],
+    # PAT settings
+    [
+      f"access-list {ini.acl_num} permit {ini.iosv_2.g0_1.ip_addr.network.network_address} {ini.iosv_2.g0_1.ip_addr.hostmask}",
+      f"ip nat inside source list {ini.acl_num} interface {ini.iosv_2.dialer0.name} overload",
+    ]
+  ])
+
+  wait.seconds(30)
+  server_1.server_ping(ini.iosv_1.loopback0.ip_addr.ip)
+  iosv_2.execs([
+    f"show ip nat translations",
+  ])
   
 if __name__ == '__main__':
   main()
