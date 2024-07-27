@@ -73,8 +73,8 @@ def main():
   iosv_1.show_mac_ip()
   iosv_2.show_mac_ip()
 
-  def populate_router_ping(device: Device, target_ip: str, sleep_time=3):
-    @wait.retry(count=30, result=0, sleep_time=sleep_time)
+  def populate_router_ping(device: Device, target_ip: str, sleep_time=3, count=30):
+    @wait.retry(count=count, result=0, sleep_time=sleep_time)
     def _populate_router_ping(device: Device):
       try:
         return parse.router_ping(device, target_ip)
@@ -84,6 +84,7 @@ def main():
     return _populate_router_ping(device)
   
   populate_router_ping(iosv_2, ini.iosv_1.loopback0.ip_addr.ip)
+  populate_router_ping(iosv_2, ini.iosv_1.loopback1.ip_addr.ip, count=7)
 
   iosv_1.execs([
     # check my MAC address and peer are shown
