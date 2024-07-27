@@ -7,7 +7,7 @@ def main():
     lab = cml.lab
 
     r1 = lab.create_iosv(ini.iosv_1.__name__, 700, 700, slots=1)
-    r2 = lab.create_iosv(ini.iosv_2.__name__, 1000, 400, slots=2)
+    r2 = lab.create_iosv(ini.iosv_2.__name__, 1000, 400, slots=1)
 
     r2.create_links([r1[0]])
     r1.create_links([r2[0]])

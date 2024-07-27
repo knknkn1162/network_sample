@@ -22,6 +22,10 @@ def main():
       f"ip address {ini.iosv_1.loopback0.ip_addr.ip} {ini.iosv_1.loopback0.ip_addr.netmask}",
     ],
     [
+      f"interface {ini.iosv_1.loopback1.name}",
+      f"ip address {ini.iosv_1.loopback1.ip_addr.ip} {ini.iosv_1.loopback1.ip_addr.netmask}",
+    ],
+    [
       f"interface {ini.iosv_1.g0_0.name}",
       f"no ip address",
       f"pppoe enable group {ini.iosv_1.bba_group_name}",
@@ -118,18 +122,30 @@ def main():
       f"interface {ini.iosv_2.dialer0.name}",
       f"ip nat outside",
     ],
-    [
-      f"ip route 0.0.0.0 0.0.0.0 {ini.iosv_2.dialer0.name}",
-    ],
+    # default gateway settings is necessary
+    # [
+    #   f"ip route 0.0.0.0 0.0.0.0 {ini.iosv_2.dialer0.name}",
+    # ],
     # PAT settings
     [
       f"access-list {ini.acl_num} permit {ini.iosv_2.g0_1.ip_addr.network.network_address} {ini.iosv_2.g0_1.ip_addr.hostmask}",
       f"ip nat inside source list {ini.acl_num} interface {ini.iosv_2.dialer0.name} overload",
     ]
   ])
+  def populate_server_ping(device: Device, target_ip: str, sleep_time=3, count=30):
+    @wait.retry(count=count, result=0, sleep_time=sleep_time)
+    def _do(device: Device):
+      try:
+        return device.server_ping(target_ip)
+      except Exception as e:
+        print(f"populate_router_ping: Exception: {e}")
+        return None
+    return _do(device)
 
-  wait.seconds(30)
-  server_1.server_ping(ini.iosv_1.loopback0.ip_addr.ip)
+  populate_server_ping(server_1, ini.iosv_1.loopback0.ip_addr.ip)
+  # default gateway settings is necessary
+  populate_server_ping(server_1, ini.iosv_1.loopback1.ip_addr.ip, count=7)
+
   iosv_2.execs([
     f"show ip nat translations",
   ])

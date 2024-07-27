@@ -11,9 +11,14 @@ class iosv_1:
    class vt1:
       name = "Virtual-Template 1"
       access_name = "Virtual-Access 1.1"
+   # used for unnumbered
    class loopback0:
       name = "loopback 0"
       ip_addr = ip_interface("10.0.0.100/32")
+   # for ping test
+   class loopback1:
+      name = "loopback 1"
+      ip_addr = ip_interface("10.0.0.200/32")
 
 # PPPoE client
 class iosv_2:
