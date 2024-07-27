@@ -107,6 +107,7 @@ iosv_0.execs([
   [
     ## crypto algo, hash algo, ID?
     f"crypto ipsec transform-set {ini.transform_label} {ini.crypto_algo} {ini.hash_algo}",
+    # f"mode tunnel"
     ## lifetime in IPsec SA
     #f"crypto ipsec security-association lifetime seconds 41200",
     ## dh group, PFS
@@ -131,10 +132,13 @@ iosv_1.execs([
     f"crypto isakmp policy {ini.priority}",
     ## authentication
     f"authentication pre-share",
-    f"group {ini.dh_group}",
-  ],
-  [
     f"crypto isakmp key {ini.preshared_key} address {ini.iosv_0.g0_1.ip_addr}",
+    #f"encryption des",
+    #f"hash sha",
+    f"group {ini.dh_group}",
+    #f"lifetime 86400",
+    # optional
+    #f"crypto isakmp keepalive 30 periodic",
   ],
   # ike phase 2
   [
@@ -144,6 +148,7 @@ iosv_1.execs([
     # access-list {ini.acl_num} permit ip {src} {src_mask} {dst} {dst_mask}
     f"access-list {ini.acl_num} permit ip {server_1_network0} {ini.INVERSE_MASK_24} {server_0_network0} {ini.INVERSE_MASK_24}",
   ],
+  # map transform-set and acl and peer
   [
     f"crypto map {ini.crypto_map_label} {ini.seq_number} ipsec-isakmp",
     # set access-list
