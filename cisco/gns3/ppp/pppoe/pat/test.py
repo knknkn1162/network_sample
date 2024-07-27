@@ -13,8 +13,14 @@ def main():
   r1 = Device(tb, 'R1')
   r2 = Device(tb, 'R2')
 
+  pc1 = Device(tb, 'pc1')
+
   # server
   r1.execs([
+    [
+      f"interface {ini.r1.loopback0.name}",
+      f"ip address {ini.r1.loopback0.ip_addr.ip} {ini.r1.loopback0.ip_addr.netmask}",
+    ],
     [
       f"interface {ini.r1.f0_0.name}",
       f"pppoe enable group {ini.r1.bba_group_name}",
@@ -28,8 +34,13 @@ def main():
     # virtual template settings
     [
       f"interface {ini.r1.vt1.name}",
-      f"ip addr {ini.r1.vt1.ip_addr.ip} {ini.r1.vt1.ip_addr.netmask}",
-    ]
+      f"ip unnumbered {ini.r1.loopback0.name}",
+      f"peer default ip address pool {ini.pool_name}",
+    ],
+    # IPCP
+    [
+      f"ip local pool {ini.pool_name} {ini.r2.dialer0.assigned_ip_addr.ip}"
+    ],
   ])
 
   # client
@@ -50,17 +61,24 @@ def main():
       #f"dialer idle-timeout 0",
       # for OSPF
       f"ip mtu {ini.mtu_size}",
-      f"ip address {ini.r2.dialer0.ip_addr.ip} {ini.r2.dialer0.ip_addr.netmask}",
+      # static
+      #f"ip address {ini.r2.dialer0.ip_addr.ip} {ini.r2.dialer0.ip_addr.netmask}",
+      # IPCP
+      f"ip address negotiated",
     ],
   ])
 
   def populate_router_ping(device: Device, target_ip: str, sleep_time=3):
     @wait.retry(count=30, result=0, sleep_time=sleep_time)
     def _populate_router_ping(device: Device):
-      return parse.router_ping(device, target_ip)
+      try:
+        return parse.router_ping(device, target_ip)
+      except Exception as e:
+        print(f"populate_router_ping: Exception: {e}")
+        return None
     return _populate_router_ping(device)
   
-  populate_router_ping(r1, ini.r2.dialer0.ip_addr.ip)
+  populate_router_ping(r2, ini.r1.loopback0.ip_addr.ip)
 
   r1.execs([
     f"show pppoe session",
@@ -75,7 +93,42 @@ def main():
     f"show ip interface brief",
     f"show ip route",
   ])
+
+  # PAT settings
+  # pc1 setting
+  pc1.execs([
+    f"ip {ini.pc1.eth0.ip_addr.ip} {ini.pc1.eth0.ip_addr.netmask} {ini.r2.f0_1.ip_addr.ip}",
+    f"show",
+  ])
+
+  r2.execs([
+    [
+      f"interface {ini.r2.f0_1.name}",
+      f"ip address {ini.r2.f0_1.ip_addr.ip} {ini.r2.f0_1.ip_addr.netmask}",
+      f"no shutdown",
+      f"ip nat inside",
+    ],
+    [
+      f"interface {ini.r2.dialer0.name}",
+      f"ip nat outside",
+    ],
+    [
+      f"ip route 0.0.0.0 0.0.0.0 {ini.r2.dialer0.name}",
+    ],
+    # PAT settings
+    [
+      f"access-list {ini.acl_num} permit {ini.r2.f0_1.ip_addr.network.network_address} {ini.r2.f0_1.ip_addr.hostmask}",
+      f"ip nat inside source list {ini.acl_num} interface {ini.r2.dialer0.name} overload",
+    ]
+  ])
+
+  def populate_server_ping(device: Device, target_ip: str, sleep_time=3):
+    @wait.retry(count=30, result=0, sleep_time=sleep_time)
+    def _do(device: Device):
+      return device.server_ping(target_ip)
+    return _do(device)
   
+  populate_server_ping(pc1, ini.r1.loopback0.ip_addr.ip)
 
 if __name__ == '__main__':
   main()
