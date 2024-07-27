@@ -13,7 +13,8 @@ class ipsec:
       preshared_key = "key1234"
       dh_group = 2
    class phase2:
-      acl_num = 10
+      # 拡張ACLの番号を 100 ～ 199、2000 ～ 2699 の範囲で指定する。
+      acl_num = 100
       class transform_set:
          crypto_param = "esp-aes"
          sig_param = "esp-sha-hmac"

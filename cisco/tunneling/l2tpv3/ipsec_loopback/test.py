@@ -5,10 +5,6 @@ from cmlmag import wait, ipv4
 import cmlmag.parse as parse
 import cmlmag.wait_until as wait_until
 import ini
-from cmlmag.structure.stp_info import (
-  Role as StpRole,
-  State as StpState
-)
 
 def main():
   tb = testbed.load(CONFIG_YAML)
@@ -29,7 +25,7 @@ def main():
     ## disable DHCP
     f"[ -f /var/run/udhcpc.eth0.pid ] && sudo kill `cat /var/run/udhcpc.eth0.pid`",
     f"sudo ifconfig eth0 {ini.server_0.eth0.ip_addr.ip} netmask {ini.server_0.eth0.ip_addr.netmask} up",
-    #f"sudo route add default gw {ini.iosv_0.loopback0.ip_addr.ip}",
+    #f"sudo route add default gw {ini.iosv_0.g0_1.ip_addr.ip}",
     f"ifconfig eth0",
     #f"route -e",
   ])
@@ -40,7 +36,7 @@ def main():
     ## disable DHCP
     f"[ -f /var/run/udhcpc.eth0.pid ] && sudo kill `cat /var/run/udhcpc.eth0.pid`",
     f"sudo ifconfig eth0 {ini.server_1.eth0.ip_addr.ip} netmask {ini.server_1.eth0.ip_addr.netmask} up",
-    #f"sudo route add default gw {ini.iosv_2.loopback0.ip_addr.ip}",
+    #f"sudo route add default gw {ini.iosv_2.g0_1.ip_addr.ip}",
     f"ifconfig eth0",
     #f"route -e",
   ])
@@ -163,6 +159,17 @@ def main():
     ],
   ])
 
+  wait_until.seconds(20)
+  iosv_0.execs([
+    f"show xconnect all",
+    f"show l2tp session",
+  ])
+
+  iosv_2.execs([
+    f"show xconnect all",
+    f"show l2tp session",
+  ])
+
   ############### ipsec ##################
   ## IKE phase 1
   iosv_0.execs([
@@ -171,9 +178,9 @@ def main():
       #f"encryption des",
       #f"hash sha",
       #f"lifetime 86400",
+      f"group {ini.ipsec.phase1.dh_group}",
       f"authentication pre-share",
       f"crypto isakmp key {ini.ipsec.phase1.preshared_key} address {ini.iosv_2.loopback0.ip_addr.ip}",
-      f"group {ini.ipsec.phase1.dh_group}",
       #f"crypto isakmp keepalive 30 periodic",
     ],
   ])
@@ -184,11 +191,10 @@ def main():
       #f"encryption des",
       #f"hash sha",
       #f"lifetime 86400",
-      f"authentication pre-share",
-      f"crypto isakmp key {ini.ipsec.phase1.preshared_key} address {ini.iosv_0.loopback0.ip_addr.ip}",
       f"group {ini.ipsec.phase1.dh_group}",
       #f"crypto isakmp keepalive 30 periodic",
-      f"access-list {ini.ipsec.phase2.acl_num} permit ip"
+      f"authentication pre-share",
+      f"crypto isakmp key {ini.ipsec.phase1.preshared_key} address {ini.iosv_0.loopback0.ip_addr.ip}",
     ],
   ])
 
@@ -197,6 +203,8 @@ def main():
     [
       f"crypto ipsec transform-set {ini.ipsec.phase2.transform_set.label} {ini.ipsec.phase2.transform_set.crypto_param} {ini.ipsec.phase2.transform_set.sig_param}",
       #f"mode tunnel",
+    ],
+    [
       #f"crypto ipsec security-association lifetime seconds 3600",
       f"access-list {ini.ipsec.phase2.acl_num} permit ip any any",
       # mapping
@@ -211,6 +219,8 @@ def main():
     [
       f"crypto ipsec transform-set {ini.ipsec.phase2.transform_set.label} {ini.ipsec.phase2.transform_set.crypto_param} {ini.ipsec.phase2.transform_set.sig_param}",
       #f"mode tunnel",
+    ],
+    [
       #f"crypto ipsec security-association lifetime seconds 3600",
       f"access-list {ini.ipsec.phase2.acl_num} permit ip any any",
       # mapping
@@ -223,13 +233,17 @@ def main():
 
   ### apply crypto_map to interface
   iosv_0.execs([
-    f"interface {ini.iosv_0.loopback0.name}",
-    f"crypto map {ini.ipsec.phase2.crypto_map.label}",
+    [
+      f"interface {ini.iosv_0.loopback0.name}",
+      f"crypto map {ini.ipsec.phase2.crypto_map.label}",
+    ]
   ])
 
   iosv_2.execs([
-    f"interface {ini.iosv_2.loopback0.name}",
-    f"crypto map {ini.ipsec.phase2.crypto_map.label}",
+    [
+      f"interface {ini.iosv_2.loopback0.name}",
+      f"crypto map {ini.ipsec.phase2.crypto_map.label}",
+    ]
   ])
 
   ############### CHECK ##################
@@ -239,6 +253,7 @@ def main():
       return device.server_ping(target_ip)
     return _do(device)
 
+  wait.seconds(30)
   populate_server_ping(server_0, ini.server_1.eth0.ip_addr.ip)
 
   iosv_0.execs([
