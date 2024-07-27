@@ -52,7 +52,13 @@ server_1.execs([
 
 # arp test
 server_0.execs([
-  f"ping {ini.server_1.eth0.ip_addr} -c 5"
+  # eth0 setting
+  ## disable DHCP
+  f"[ -f /var/run/udhcpc.eth0.pid ] && sudo kill `cat /var/run/udhcpc.eth0.pid`",
+  f"sudo ifconfig eth0 {ini.server_0.eth0.ip_addr} netmask {ini.server_0.eth0.subnet_mask} up",
+  f"sudo route add default gw {ini.server_0.eth0.default_gw_addr}",
+  f"ifconfig eth0",
+  f"route -e",
 ])
 
 # check if register MAC address or not(it should be true)
