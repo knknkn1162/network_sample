@@ -259,6 +259,7 @@ def main():
   iosv_0.execs([
     f"show xconnect all",
     f"show l2tp session",
+    # IKE phase 1
     f"show crypto isakmp sa",
     f"show crypto ipsec sa",
   ])
@@ -266,6 +267,7 @@ def main():
   iosv_2.execs([
     f"show xconnect all",
     f"show l2tp session",
+    # IKE phase 2
     f"show crypto isakmp sa",
     f"show crypto ipsec sa",
   ])
