@@ -123,9 +123,9 @@ def main():
       f"ip nat outside",
     ],
     # default gateway settings is necessary
-    # [
-    #   f"ip route 0.0.0.0 0.0.0.0 {ini.iosv_2.dialer0.name}",
-    # ],
+    [
+      f"ip route 0.0.0.0 0.0.0.0 {ini.iosv_2.dialer0.name}",
+    ],
     # PAT settings
     [
       f"access-list {ini.acl_num} permit {ini.iosv_2.g0_1.ip_addr.network.network_address} {ini.iosv_2.g0_1.ip_addr.hostmask}",
@@ -143,7 +143,7 @@ def main():
     return _do(device)
 
   populate_server_ping(server_1, ini.iosv_1.loopback0.ip_addr.ip)
-  # default gateway settings is necessary
+  # default gateway settings is necessary or it will not work
   populate_server_ping(server_1, ini.iosv_1.loopback1.ip_addr.ip, count=7)
 
   iosv_2.execs([
