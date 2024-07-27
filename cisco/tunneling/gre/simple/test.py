@@ -62,8 +62,10 @@ iosv_0.execs([
   [
     f"interface {ini.tunnel0.name}",
     f"ip address {ini.tunnel0.v0.ip_addr} {ini.tunnel0.v0.subnet_mask}",
+    # Note that routing exists between source_ip <-> dest_ip
     f"tunnel source {ini.tunnel0.v0.interface.ip_addr}",
     f"tunnel destination {ini.tunnel0.v1.interface.ip_addr}",
+    #f"tunnel mode gre ip",
   ]
 ])
 
@@ -73,6 +75,7 @@ iosv_2.execs([
     f"ip address {ini.tunnel0.v1.ip_addr} {ini.tunnel0.v1.subnet_mask}",
     f"tunnel source {ini.tunnel0.v1.interface.ip_addr}",
     f"tunnel destination {ini.tunnel0.v0.interface.ip_addr}",
+    #f"tunnel mode gre ip",
   ]
 ])
 
