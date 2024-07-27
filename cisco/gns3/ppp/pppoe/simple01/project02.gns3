@@ -49,12 +49,44 @@
                     }
                 ],
                 "suspend": false
+            },
+            {
+                "filters": {},
+                "link_id": "c011a75b-70a1-4034-a0e8-0882e55e638f",
+                "link_style": {},
+                "nodes": [
+                    {
+                        "adapter_number": 0,
+                        "label": {
+                            "rotation": 0,
+                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                            "text": "f0/1",
+                            "x": 64,
+                            "y": 46
+                        },
+                        "node_id": "d49eb623-302f-42d1-8b99-9be2af9c31c9",
+                        "port_number": 1
+                    },
+                    {
+                        "adapter_number": 0,
+                        "label": {
+                            "rotation": 0,
+                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                            "text": "e0",
+                            "x": -7,
+                            "y": 0
+                        },
+                        "node_id": "1bacbc9e-9d9c-4e56-91dc-96b79e7973e3",
+                        "port_number": 0
+                    }
+                ],
+                "suspend": false
             }
         ],
         "nodes": [
             {
                 "compute_id": "vm",
-                "console": 5000,
+                "console": 5004,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -91,7 +123,7 @@
                     "mmap": true,
                     "nvram": 256,
                     "platform": "c3725",
-                    "ram": 128,
+                    "ram": 256,
                     "slot0": "GT96100-FE",
                     "slot1": "NM-1FE-TX",
                     "slot2": "NM-4T",
@@ -111,7 +143,7 @@
             },
             {
                 "compute_id": "vm",
-                "console": 5001,
+                "console": 5005,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -148,7 +180,7 @@
                     "mmap": true,
                     "nvram": 256,
                     "platform": "c3725",
-                    "ram": 128,
+                    "ram": 256,
                     "slot0": "GT96100-FE",
                     "slot1": "NM-1FE-TX",
                     "slot2": "NM-4T",
@@ -164,6 +196,35 @@
                 "width": 66,
                 "x": 35,
                 "y": -74,
+                "z": 1
+            },
+            {
+                "compute_id": "vm",
+                "console": 5000,
+                "console_auto_start": false,
+                "console_type": "telnet",
+                "custom_adapters": [],
+                "first_port_name": null,
+                "height": 59,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "PC1",
+                    "x": 16,
+                    "y": -25
+                },
+                "locked": false,
+                "name": "PC1",
+                "node_id": "1bacbc9e-9d9c-4e56-91dc-96b79e7973e3",
+                "node_type": "vpcs",
+                "port_name_format": "Ethernet{0}",
+                "port_segment_size": 0,
+                "properties": {},
+                "symbol": ":/symbols/vpcs_guest.svg",
+                "template_id": "19021f99-e36f-394d-b4a1-8aaa902ab9cc",
+                "width": 65,
+                "x": 195,
+                "y": 39,
                 "z": 1
             }
         ]
