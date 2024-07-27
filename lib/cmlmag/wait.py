@@ -1,4 +1,6 @@
 import time
+import sys
+
 def retry(count: int, result, sleep_time: int):
   def _retry(func):
     def wrapper(*args, **kwargs):
@@ -35,3 +37,8 @@ def bretry(count: int, sleep_time: int):
       return flag
     return wrapper
   return _retry
+
+def seconds(secs):
+  print(f"wait for {secs}[s]")
+  sys.stdout.flush()
+  time.sleep(secs)
