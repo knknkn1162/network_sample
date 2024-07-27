@@ -115,7 +115,7 @@ iosv_1.execs([
 iosv_1.execs([
   [
     f"interface {ini.iosv_1.vtemplate1.name}",
-    # WAN側（インターネット接続側）に割り振られるIPアドレスをなし（unnumbered）
+    # WAN側（インターネット接続側）に割り振られるIPアドレスをなし（unnumbered）にする
     f"ip unnumbered {ini.iosv_1.loopback0.name}",
     f"peer default ip address pool {ini.iosv_1.vtemplate1.pool_name}",
     f"ppp authentication chap",
