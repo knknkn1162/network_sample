@@ -23,6 +23,7 @@ def main():
       f"interface {ini.iosv_1.loopback1.name}",
       f"ip address {ini.iosv_1.loopback1.ip_addr.ip} {ini.iosv_1.loopback1.ip_addr.netmask}",
     ],
+    # This settings are necessary
     [
       f"interface {ini.iosv_1.g0_0.name}",
       f"no ip address",
