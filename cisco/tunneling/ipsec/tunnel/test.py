@@ -113,7 +113,7 @@ def main():
       f"ip route 0.0.0.0 0.0.0.0 {ini.iosv_1.g0_1.ip_addr.ip}"
     ]
   ])
-  # # ospf routing
+  # # ospf routing(IPsec cannot handle multi-cast)
   # iosv_0.execs([
   #   [
   #     f"router ospf {ini.ospf_process_id}",
