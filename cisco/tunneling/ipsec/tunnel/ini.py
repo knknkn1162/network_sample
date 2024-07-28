@@ -2,7 +2,8 @@ from ipaddress import ip_interface
 from typing import Self
 import re
 
-pcap_file = "test.pcap"
+pcap01_file = "test01.pcap"
+pcap02_file = "test02.pcap"
 ospf_process_id = 10
 vc_id = 1
 pw_class_label = "L2TPv3z"

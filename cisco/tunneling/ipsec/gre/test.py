@@ -17,7 +17,8 @@ def main():
   server_1 = Device(tb, ini.server_1.__name__)
   print("####### exec #######")
   cml = Cml()
-  pcap = cml.lab.create_pcap(iosv_0.name, iosv_1.name, auth_token=cml.auth_token)
+  pcap01 = cml.lab.create_pcap(iosv_0.name, iosv_1.name, auth_token=cml.auth_token)
+  pcap02 = cml.lab.create_pcap(server_0.name, iosv_0.name, auth_token=cml.auth_token)
 
   # server setup
   server_0.execs([
@@ -261,9 +262,11 @@ def main():
     f"show crypto session detail",
   ])
 
-  pcap.start(maxpackets=500)
+  pcap01.start(maxpackets=100)
+  pcap02.start(maxpackets=100)
   server_0.server_ping(ini.server_1.eth0.ip_addr.ip)
-  pcap.download(file=ini.pcap_file)
+  pcap01.download(file=ini.pcap01_file)
+  pcap02.download(file=ini.pcap02_file)
 
 if __name__ == '__main__':
   main()
