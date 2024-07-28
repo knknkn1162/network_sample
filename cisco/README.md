@@ -57,6 +57,8 @@ make test
       + `interface <int>`
       + `ip nat inside/outside`
       + `ip nat inside source static <inside local> <inside_global>`
+      + [ ] outside -> inside translation
+        + `ip nat outside source <global> <local>`
     + [x] Dynamic NAT(DNAT)
       + `interface <int>`
       + `ip nat inside/outside`
