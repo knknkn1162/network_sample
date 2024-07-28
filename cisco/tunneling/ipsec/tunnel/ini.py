@@ -1,10 +1,12 @@
 from ipaddress import ip_interface
 from typing import Self
 import re
-SUBNET_MASK_24 = "255.255.255.0"
-INVERSE_MASK_24 = "0.0.0.255"
+
+pcap_file = "test.pcap"
 ospf_process_id = 10
 vc_id = 1
+pw_class_label = "L2TPv3z"
+
 
 # ipsec
 class ipsec:
@@ -52,7 +54,7 @@ class iosv_2:
       ip_addr = ip_interface("192.168.2.3/24")
    class g0_1:
       name = "GigabitEthernet0/1"
-      ip_addr = ip_interface("192.168.0.254/24")
+      ip_addr = ip_interface("192.168.3.254/24")
    class loopback0:
       name = "loopback0"
       ip_addr = ip_interface("10.0.0.3/32")
@@ -63,4 +65,5 @@ class server_0:
 
 class server_1:
     class eth0:
-      ip_addr = ip_interface("192.168.0.2/24")
+      # same network segment
+      ip_addr = ip_interface("192.168.3.2/24")
