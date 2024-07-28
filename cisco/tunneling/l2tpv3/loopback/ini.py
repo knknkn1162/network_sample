@@ -3,6 +3,7 @@ from typing import Self
 import re
 SUBNET_MASK_24 = "255.255.255.0"
 INVERSE_MASK_24 = "0.0.0.255"
+pcap_file = "test.pcap"
 ospf_process_id = 10
 vc_id = 1
 

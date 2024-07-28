@@ -20,8 +20,9 @@ def main():
   server_0 = Device(tb, ini.server_0.__name__)
   server_1 = Device(tb, ini.server_1.__name__)
   print("####### exec #######")
+
   cml = Cml()
-  #pcap = cml.lab.create_pcap(iosvl2_0.name, iosvl2_2.name, auth_token=cml.auth_token)
+  pcap = cml.lab.create_pcap(iosv_0.name, iosv_1.name, auth_token=cml.auth_token)
 
   # server setup
   server_0.execs([
@@ -174,7 +175,6 @@ def main():
     return _do(device)
 
   populate_server_ping(server_0, ini.server_1.eth0.ip_addr.ip)
-  
   iosv_0.execs([
     f"show xconnect all",
     f"show l2tp session",
@@ -184,6 +184,11 @@ def main():
     f"show xconnect all",
     f"show l2tp session",
   ])
+
+  
+  pcap.start(maxpackets=500)
+  server_0.server_ping(ini.server_1.eth0.ip_addr.ip)
+  pcap.download(file=ini.pcap_file)
 
 if __name__ == '__main__':
   main()
