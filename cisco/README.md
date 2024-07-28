@@ -52,6 +52,14 @@ make test
     + `show ip dhcp conflict`
     + `show dhcp lease`
 + WAN
+  + VPN
+    + internet VPN
+      + site to site VPN
+      + remote access VPN
+        + SSL-VPN
+      + ipsec
+    + IP-VPN
+      + MLPS
   + NAT
     + [x] Static NAT(SNAT)
       + `interface <int>`
