@@ -116,7 +116,7 @@
             },
             {
                 "filters": {},
-                "link_id": "2b08bac2-39f6-468d-ad70-eefa102b7d99",
+                "link_id": "bba4b0bb-e2b4-4ac9-9b01-9b30ede080a2",
                 "link_style": {},
                 "nodes": [
                     {
@@ -136,11 +136,11 @@
                         "label": {
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "nat0",
-                            "x": -9,
-                            "y": 24
+                            "text": "eth0",
+                            "x": 0,
+                            "y": 26
                         },
-                        "node_id": "1fb48af3-b706-47f2-8c8b-86fe0bbeef6d",
+                        "node_id": "1c2de6d6-a520-4c82-ba55-bbb17b9588a5",
                         "port_number": 0
                     }
                 ],
@@ -203,44 +203,6 @@
                 "width": 66,
                 "x": -79,
                 "y": 0,
-                "z": 1
-            },
-            {
-                "compute_id": "vm",
-                "console": null,
-                "console_auto_start": false,
-                "console_type": null,
-                "custom_adapters": [],
-                "first_port_name": null,
-                "height": 71,
-                "label": {
-                    "rotation": 0,
-                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "NAT1",
-                    "x": 59,
-                    "y": -25
-                },
-                "locked": false,
-                "name": "NAT1",
-                "node_id": "1fb48af3-b706-47f2-8c8b-86fe0bbeef6d",
-                "node_type": "nat",
-                "port_name_format": "Ethernet{0}",
-                "port_segment_size": 0,
-                "properties": {
-                    "ports_mapping": [
-                        {
-                            "interface": "virbr0",
-                            "name": "nat0",
-                            "port_number": 0,
-                            "type": "ethernet"
-                        }
-                    ]
-                },
-                "symbol": ":/symbols/nat.svg",
-                "template_id": "df8f4ea9-33b7-3e96-86a2-c39bc9bb649c",
-                "width": 159,
-                "x": 121,
-                "y": 15,
                 "z": 1
             },
             {
@@ -379,6 +341,86 @@
                 "width": 65,
                 "x": -313,
                 "y": 30,
+                "z": 1
+            },
+            {
+                "compute_id": "vm",
+                "console": null,
+                "console_auto_start": false,
+                "console_type": null,
+                "custom_adapters": [],
+                "first_port_name": null,
+                "height": 71,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "Cloud1",
+                    "x": 56,
+                    "y": -25
+                },
+                "locked": false,
+                "name": "Cloud1",
+                "node_id": "1c2de6d6-a520-4c82-ba55-bbb17b9588a5",
+                "node_type": "cloud",
+                "port_name_format": "Ethernet{0}",
+                "port_segment_size": 0,
+                "properties": {
+                    "interfaces": [
+                        {
+                            "name": "docker0",
+                            "special": true,
+                            "type": "ethernet"
+                        },
+                        {
+                            "name": "eth0",
+                            "special": false,
+                            "type": "ethernet"
+                        },
+                        {
+                            "name": "eth1",
+                            "special": false,
+                            "type": "ethernet"
+                        },
+                        {
+                            "name": "lo",
+                            "special": true,
+                            "type": "ethernet"
+                        },
+                        {
+                            "name": "virbr0",
+                            "special": true,
+                            "type": "ethernet"
+                        },
+                        {
+                            "name": "virbr0-nic",
+                            "special": true,
+                            "type": "ethernet"
+                        }
+                    ],
+                    "ports_mapping": [
+                        {
+                            "interface": "eth0",
+                            "name": "eth0",
+                            "port_number": 0,
+                            "type": "ethernet"
+                        },
+                        {
+                            "interface": "eth1",
+                            "name": "eth1",
+                            "port_number": 1,
+                            "type": "ethernet"
+                        }
+                    ],
+                    "remote_console_host": "",
+                    "remote_console_http_path": "/",
+                    "remote_console_port": 23,
+                    "remote_console_type": "none"
+                },
+                "symbol": ":/symbols/cloud.svg",
+                "template_id": "39e257dc-8412-3174-b6b3-0ee3ed6a43e9",
+                "width": 159,
+                "x": 104,
+                "y": 12,
                 "z": 1
             }
         ]
