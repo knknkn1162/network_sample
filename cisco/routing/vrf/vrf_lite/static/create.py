@@ -17,8 +17,8 @@ def main():
     c1.create_links([r0[1]])
     c2.create_links([r1[0]])
     c3.create_links([r1[1]])
-    r0.create_links([c0[0], c1[0], r0[2]])
-    r1.create_links([c2[1], c3[1], r1[2]])
+    r0.create_links([c0[0], c1[0], r1[2]])
+    r1.create_links([c2[0], c3[0], r0[2]])
 
     lab.start()
 

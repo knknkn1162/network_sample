@@ -66,63 +66,7 @@ def main():
     f"route -e",
   ])
 
-  ## up
-  iosv_0.execs([
-    [
-      f"interface {ini.iosv_0.g0_0.name}",
-      f"ip addr {ini.iosv_0.g0_0.ip_addr.ip} {ini.iosv_0.g0_0.ip_addr.netmask}",
-      f"no shutdown",
-    ],
-    [
-      f"interface {ini.iosv_0.g0_1.name}",
-      f"ip addr {ini.iosv_0.g0_1.ip_addr.ip} {ini.iosv_0.g0_1.ip_addr.netmask}",
-      f"no shutdown",
-    ],
-    [
-      f"interface {ini.iosv_0.g0_2.name}",
-      f"no ip address",
-      f"no shutdown",
-    ],
-    [
-      f"interface {ini.iosv_0.g0_2.name}.{ini.iosv_0.g0_2.sub0.num}",
-      f"ip addr {ini.iosv_0.g0_2.sub0.ip_addr.ip} {ini.iosv_0.g0_2.sub0.ip_addr.netmask}",
-      f"encapsulation dot1Q {ini.iosv_0.g0_2.sub0.num}",
-      f"no shutdown",
-    ],
-    [
-      f"interface {ini.iosv_0.g0_2.name}.{ini.iosv_0.g0_2.sub0.num}",
-      f"ip addr {ini.iosv_0.g0_2.sub1.ip_addr.ip} {ini.iosv_0.g0_2.sub1.ip_addr.netmask}",
-      f"encapsulation dot1Q {ini.iosv_0.g0_2.sub1.num}",
-      f"no shutdown",
-    ],
-  ])
-
-  iosv_1.execs([
-    [
-      f"interface {ini.iosv_1.g0_0.name}",
-      f"ip addr {ini.iosv_1.g0_0.ip_addr.ip} {ini.iosv_1.g0_0.ip_addr.netmask}",
-      f"no shutdown",
-    ],
-    [
-      f"interface {ini.iosv_1.g0_1.name}",
-      f"ip addr {ini.iosv_1.g0_1.ip_addr.ip} {ini.iosv_1.g0_1.ip_addr.netmask}",
-      f"no shutdown",
-    ],
-    [
-      f"interface {ini.iosv_1.g0_2.name}.{ini.iosv_0.g0_2.sub0.num}",
-      f"ip addr {ini.iosv_1.g0_2.sub0.ip_addr.ip} {ini.iosv_1.g0_2.sub0.ip_addr.netmask}",
-      # create multiple virtual interface on a one physical interface
-      f"encapsulation dot1Q {ini.iosv_1.g0_2.sub0.num}",
-      f"no shutdown",
-    ],
-    [
-      f"interface {ini.iosv_1.g0_2.name}.{ini.iosv_1.g0_2.sub1.num}",
-      f"ip addr {ini.iosv_1.g0_2.sub1.ip_addr.ip} {ini.iosv_1.g0_2.sub1.ip_addr.netmask}",
-      f"encapsulation dot1Q {ini.iosv_1.g0_2.sub1.num}",
-      f"no shutdown",
-    ],
-  ])
-
+  # vrf setting first
   # VRF-lite setting
   iosv_0.execs([
     [
@@ -146,7 +90,7 @@ def main():
       f"ip vrf forwarding {ini.iosv_0.g0_2.sub0.site.name}",
     ],
     [
-      f"interface {ini.iosv_0.g0_2.name}.{ini.iosv_0.g0_2.sub0.num}",
+      f"interface {ini.iosv_0.g0_2.name}.{ini.iosv_0.g0_2.sub1.num}",
       f"ip vrf forwarding {ini.iosv_0.g0_2.sub1.site.name}",
     ],
   ])
@@ -173,8 +117,68 @@ def main():
       f"ip vrf forwarding {ini.iosv_1.g0_2.sub0.site.name}",
     ],
     [
-      f"interface {ini.iosv_1.g0_2.name}.{ini.iosv_1.g0_2.sub0.num}",
+      f"interface {ini.iosv_1.g0_2.name}.{ini.iosv_1.g0_2.sub1.num}",
       f"ip vrf forwarding {ini.iosv_1.g0_2.sub1.site.name}",
+    ],
+  ])
+
+  ## up
+  iosv_0.execs([
+    [
+      f"interface {ini.iosv_0.g0_0.name}",
+      f"ip addr {ini.iosv_0.g0_0.ip_addr.ip} {ini.iosv_0.g0_0.ip_addr.netmask}",
+      f"no shutdown",
+    ],
+    [
+      f"interface {ini.iosv_0.g0_1.name}",
+      # if vrf setting later, <ip_addr> overlaps with ..
+      f"ip addr {ini.iosv_0.g0_1.ip_addr.ip} {ini.iosv_0.g0_1.ip_addr.netmask}",
+      f"no shutdown",
+    ],
+    [
+      f"interface {ini.iosv_0.g0_2.name}",
+      f"no ip address",
+      f"no shutdown",
+    ],
+    [
+      f"interface {ini.iosv_0.g0_2.name}.{ini.iosv_0.g0_2.sub0.num}",
+      # Configuring IP routing on a LAN subinterface is only allowed if that 
+      # subinterface is already configured as part of an IEEE 802.10, IEEE 802.1Q, 
+      # or ISL vLAN
+      f"encapsulation dot1Q {ini.iosv_0.g0_2.sub0.num}",
+      f"ip addr {ini.iosv_0.g0_2.sub0.ip_addr.ip} {ini.iosv_0.g0_2.sub0.ip_addr.netmask}",
+      f"no shutdown",
+    ],
+    [
+      f"interface {ini.iosv_0.g0_2.name}.{ini.iosv_0.g0_2.sub1.num}",
+      f"encapsulation dot1Q {ini.iosv_0.g0_2.sub1.num}",
+      f"ip addr {ini.iosv_0.g0_2.sub1.ip_addr.ip} {ini.iosv_0.g0_2.sub1.ip_addr.netmask}",
+      f"no shutdown",
+    ],
+  ])
+
+  iosv_1.execs([
+    [
+      f"interface {ini.iosv_1.g0_0.name}",
+      f"ip addr {ini.iosv_1.g0_0.ip_addr.ip} {ini.iosv_1.g0_0.ip_addr.netmask}",
+      f"no shutdown",
+    ],
+    [
+      f"interface {ini.iosv_1.g0_1.name}",
+      f"ip addr {ini.iosv_1.g0_1.ip_addr.ip} {ini.iosv_1.g0_1.ip_addr.netmask}",
+      f"no shutdown",
+    ],
+    [
+      f"interface {ini.iosv_1.g0_2.name}.{ini.iosv_0.g0_2.sub0.num}",
+      f"encapsulation dot1Q {ini.iosv_1.g0_2.sub0.num}",
+      f"ip addr {ini.iosv_1.g0_2.sub0.ip_addr.ip} {ini.iosv_1.g0_2.sub0.ip_addr.netmask}",
+      f"no shutdown",
+    ],
+    [
+      f"interface {ini.iosv_1.g0_2.name}.{ini.iosv_1.g0_2.sub1.num}",
+      f"encapsulation dot1Q {ini.iosv_1.g0_2.sub1.num}",
+      f"ip addr {ini.iosv_1.g0_2.sub1.ip_addr.ip} {ini.iosv_1.g0_2.sub1.ip_addr.netmask}",
+      f"no shutdown",
     ],
   ])
 
@@ -199,10 +203,14 @@ def main():
   iosv_0.execs([
     f"show ip vrf brief",
     f"show ip route",
+    f"show ip route vrf {ini.site_a.name}",
+    f"show ip route vrf {ini.site_b.name}",
   ])
   iosv_1.execs([
     f"show ip vrf brief",
     f"show ip route",
+    f"show ip route vrf {ini.site_a.name}",
+    f"show ip route vrf {ini.site_b.name}",
   ])
   
   # pcap.start(maxpackets=500)
