@@ -169,6 +169,11 @@ def main():
       f"no shutdown",
     ],
     [
+      f"interface {ini.iosv_0.g0_2.name}",
+      f"no ip address",
+      f"no shutdown",
+    ],
+    [
       f"interface {ini.iosv_1.g0_2.name}.{ini.iosv_0.g0_2.sub0.num}",
       f"encapsulation dot1Q {ini.iosv_1.g0_2.sub0.num}",
       f"ip addr {ini.iosv_1.g0_2.sub0.ip_addr.ip} {ini.iosv_1.g0_2.sub0.ip_addr.netmask}",
