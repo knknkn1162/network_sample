@@ -101,6 +101,7 @@ iosv_0.execs([
     f"encapsulation dot1q {ini.iosv_0.g0_0.sub1.vlan.num}",
     f"ip address {ini.iosv_0.g0_0.sub1.ip_addr} {ini.iosv_0.g0_0.sub1.subnet_mask}",
   ],
+  # don't forget to "no shutdown" on interface that has sub-interface
   [
     f"interface {ini.iosv_0.g0_0.name}",
     f"no shutdown",
