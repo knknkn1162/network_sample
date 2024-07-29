@@ -202,8 +202,10 @@ def main():
   ])
 
   wait.seconds(30)
+  pcap.start(maxpackets=100)
   server_0.server_ping(ini.server_2.eth0.ip_addr.ip)
   server_1.server_ping(ini.server_3.eth0.ip_addr.ip)
+  pcap.download(file=ini.pcap_file)
 
   iosv_0.execs([
     f"show ip vrf brief",
