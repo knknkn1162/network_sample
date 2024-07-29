@@ -7,10 +7,12 @@ vc_id = 1
 class site_a:
    name = "SITE-A"
    rd = "10:10"
+   vlan_num = 10
 
 class site_b:
    name = "SITE-B"
    rd = "20:20"
+   vlan_num = 20
 
 class iosv_0:
    class g0_0:
@@ -25,6 +27,7 @@ class iosv_0:
       name = "GigabitEthernet0/2"
       class sub0:
          num = 1
+         vlan_num = 10
          ip_addr = ip_interface("192.168.10.1/24")
          site = site_a
       class sub1:
