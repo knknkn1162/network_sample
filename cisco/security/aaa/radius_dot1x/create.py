@@ -6,7 +6,6 @@ def main():
     cml = Cml()
     lab = cml.lab
 
-    s0 = lab.create_unmanaged_switch(ini.sw_0.__name__, 400, 400, slots=2)
     s1 = lab.create_iosvl2(ini.iosvl2_0.__name__, 700, 400, slots=3)
 
     # server
@@ -19,14 +18,8 @@ def main():
     ex1 = lab.create_external_connector(ini.ex_conn1.__name__, 100, 700)
 
     ex1.create_links([c1[0]])
-    #c1.create_links([s0[0]])
-
-    c1.create_links([ex1[0], s0[0]])
-
-    s0.create_links([c1[1], s1[0]])
-    s1.create_links([s0[1], c0[1], c2[0]])
-    # s0.create_links([c1[0], r0[0]])
-    # r0.create_links([s0[1], c0[1]])
+    c1.create_links([ex1[0], s1[0]])
+    s1.create_links([c1[1], c0[1], c2[0]])
     c2.create_links([s1[2]])
 
     c0.create_links([ex0[0], s1[1]])

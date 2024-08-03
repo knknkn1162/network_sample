@@ -17,7 +17,9 @@ def main():
   server_0 = Device(tb, ini.server_0.__name__)
   print("####### exec #######")
   cml = Cml()
-  pcap = cml.lab.create_pcap(iosvl2_0.name, ubuntu_0.name, auth_token=cml.auth_token)
+  pcap_supp = cml.lab.create_pcap(iosvl2_0.name, ubuntu_1.name, auth_token=cml.auth_token)
+  pcap_authe = cml.lab.create_pcap(iosvl2_0.name, ubuntu_0.name, auth_token=cml.auth_token)
+
 
   # server install package
   # setup first
@@ -41,14 +43,16 @@ sudo apt update && sudo apt install -y freeradius freeradius-utils
     ## disable DHCP
     f"[ -f /var/run/udhcpc.eth0.pid ] && sudo kill `cat /var/run/udhcpc.eth0.pid`",
     f"sudo ifconfig eth0 {ini.server_0.eth0.ip_addr.ip} netmask {ini.server_0.eth0.ip_addr.netmask} up",
-    # set default gw to virtual address of glbp
+    f"sudo route add default gw {ini.iosvl2_0.g0_2.ip_addr.ip}",
     f"ifconfig eth0",
+    f"route -e",
   ])
 
   iosvl2_0.execs([
     [
       f"interface vlan {ini.iosvl2_0.vlan.num}",
-      f"ip addr {ini.iosvl2_0.vlan.ip_addr.ip} {ini.iosvl2_0.vlan.ip_addr.netmask}"
+      f"ip addr {ini.iosvl2_0.vlan.ip_addr.ip} {ini.iosvl2_0.vlan.ip_addr.netmask}",
+      f"no shutdown",
     ],
     [
       f"interface {ini.iosvl2_0.g0_0.name}",
@@ -59,6 +63,11 @@ sudo apt update && sudo apt install -y freeradius freeradius-utils
       f"interface {ini.iosvl2_0.g0_1.name}",
       f"no switchport",
       f"ip addr {ini.iosvl2_0.g0_1.ip_addr.ip} {ini.iosvl2_0.g0_1.ip_addr.netmask}",
+    ],
+    [
+      f"interface {ini.iosvl2_0.g0_2.name}",
+      f"no switchport",
+      f"ip addr {ini.iosvl2_0.g0_2.ip_addr.ip} {ini.iosvl2_0.g0_2.ip_addr.netmask}",
     ],
   ])
 
@@ -145,7 +154,6 @@ EOF
   wait.seconds(2)
   ubuntu_0.execs([
     f"sudo service freeradius restart",
-    #f"sudo freeradius -CX",
   ])
 
   wait.seconds(10)
@@ -203,12 +211,8 @@ EOF
     ]
   ])
 
-  ## telnet settings to test
   iosvl2_0.execs([
-    [
-      f"line vty 0 4",
-      f"transport input telnet",
-    ]
+    f"show dot1x interface {ini.iosvl2_0.g0_0.name}",
   ])
 
   # radius supplicant settings
@@ -216,7 +220,7 @@ EOF
   ubuntu_1.execs([
     # see https://help.ubuntu.com/community/Network802.1xAuthentication
     f"""
-cat <<- EOF | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf
+cat <<- EOF | sudo tee -a {ini.wpa_supplicant_path}
 # Where is the control interface located? This is the default path:
 ctrl_interface=/var/run/wpa_supplicant
 
@@ -229,15 +233,17 @@ ctrl_interface_group=0
 #   to 1 because of compatibility problems with a number of wireless
 #   access points. So we explicitly set it to version 2:
 eapol_version=2
+
+# When configuring WPA-Supplicant for use on a wired network, we don’t need to
+#   scan for wireless access points. See the wpa-supplicant documentation if
+#   you are authenticating through 802.1x on a wireless network:
+ap_scan=0
 # EAP: PPP Extensible Authentication Protocol (See https://www.infraexpert.com/study/wireless51.html)
 network={{
         key_mgmt=IEEE8021X
-        eap=MD5
+        eap=PEAP
         identity="{ini.radius.user_id}"
-        anonymous_identity="{ini.radius.user_id}"
         password="{ini.radius.password}"
-        phase1="auth=MD5"
-        phase2="auth=PAP password={ini.radius.user_id}"
         eapol_flags=0
 }}
 EOF
@@ -245,24 +251,31 @@ EOF
   ])
 
   wait.seconds(4)
+  pcap_supp.start(maxpackets=200)
+  pcap_authe.start(maxpackets=200)
+  ubuntu_1.server_ping(ini.server_0.eth0.ip_addr.ip)
+
+  # authe dot1x
   ubuntu_1.execs([
-    f"sudo wpa_supplicant -c /etc/wpa_supplicant/wpa_supplicant.conf -D wired -i {ini.ubuntu_1.ens3.__name__}"
+    # -dd: verbose
+    f"nohup sudo wpa_supplicant -dd -c {ini.wpa_supplicant_path} -D wired -i {ini.ubuntu_1.ens3.__name__} 2> /dev/null &",
   ])
 
   ### CHECK
-  iosvl2_0.execs([
-    f"show dot1x interface {ini.iosvl2_0.g0_0.name}",
+
+  def populate_server_ping(device: Device, target_ip: str, count=5):
+    @wait.retry(count=30, result=0, sleep_time=3)
+    def _do(device: Device):
+      return device.server_ping(target_ip, count)
+    return _do(device)
+  
+  populate_server_ping(ubuntu_1, ini.server_0.eth0.ip_addr.ip)
+  pcap_supp.download(ini.pcap_file0)
+  pcap_authe.download(ini.pcap_file1)
+
+  ubuntu_1.execs([
+    f"cat nohup.out",
   ])
-
-  ubuntu_1.server_ping(ini.server_0.eth0.ip_addr.ip)
-
-  # iosvl2_0.execs([
-  #   f"test aaa group radius {ini.radius.user_id} {ini.radius.password} new-code"
-  # ])
-  # pcap.start(maxpackets=100)
-  # # telnet test
-  # ubuntu_1.check_server_telnet(ini.iosvl2_0.g0_0.ip_addr.ip, username = ini.radius.user_id, password = ini.radius.password)
-  # pcap.download(file=ini.pcap_file)
 
 if __name__ == '__main__':
   main()

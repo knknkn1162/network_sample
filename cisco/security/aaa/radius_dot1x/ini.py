@@ -1,6 +1,7 @@
 from ipaddress import ip_interface
-pcap_file = "test.pcap"
-
+pcap_file0 = "test0.pcap"
+pcap_file1 = "test1.pcap"
+wpa_supplicant_path = "/etc/wpa_supplicant/wpa_supplicant.conf"
 
 class ex_conn0:
    pass
@@ -24,6 +25,10 @@ class iosvl2_0:
          server_name = "RADIUS-SERVER01"
          password = "secret02"
          key = "key002"
+   class g0_2:
+      name = "GigabitEthernet0/2"
+      # no switchport
+      ip_addr = ip_interface("192.168.2.254/24")
 
 class radius:
    init_password = "testing123"
@@ -47,4 +52,4 @@ class ubuntu_1:
 
 class server_0:
    class eth0:
-      ip_addr = ip_interface("192.168.0.10/24")
+      ip_addr = ip_interface("192.168.2.1/24")
