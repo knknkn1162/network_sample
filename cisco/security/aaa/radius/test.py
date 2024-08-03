@@ -169,7 +169,7 @@ EOF
       #f"aaa authentication dot1x default group {ini.iosv_0.g0_1.radius_auth.group_name}",
       # Authorization
       f"aaa authorization exec default group {ini.iosv_0.g0_1.radius_auth.group_name}",
-      f"aaa authorization network default group {ini.iosv_0.g0_1.radius_auth.group_name}",
+      #f"aaa authorization network default group {ini.iosv_0.g0_1.radius_auth.group_name}",
       ## コンソール認可の有効化
       f"aaa authorization console",
       # Accounting
