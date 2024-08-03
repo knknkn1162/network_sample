@@ -89,6 +89,13 @@ class Device:
     ])
     return res[0]
 
+  def check_server_telnet(self, target_ip: str, username: str, password: str):
+    self.execs([
+    f"""
+bash -c "sleep 2; echo {username}; sleep 1; echo {password}; sleep 1; echo exit" | telnet {target_ip}
+    """
+  ])
+
   def show_mac_ip(self):
     return self.execs([
       f"show interfaces | i (.* line protocol is )|(.* address is)",

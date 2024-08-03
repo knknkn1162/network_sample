@@ -11,12 +11,19 @@ def main():
     # server
     c0 = lab.create_ubuntu_server(ini.ubuntu_0.__name__, 1000, 400, slots=2)
     # client
-    c1 = lab.create_ubuntu_server(ini.ubuntu_1.__name__, 100, 400, slots=1)
+    c1 = lab.create_ubuntu_server(ini.ubuntu_1.__name__, 100, 400, slots=2)
     ex0 = lab.create_external_connector(ini.ex_conn0.__name__, 1000, 700)
+    ex1 = lab.create_external_connector(ini.ex_conn1.__name__, 100, 700)
 
-    c1.create_links([s0[0]])
-    s0.create_links([c1[0], r0[0]])
+    ex1.create_links([c1[0]])
+    #c1.create_links([s0[0]])
+
+    c1.create_links([ex1[0], s0[0]])
+
+    s0.create_links([c1[1], r0[0]])
     r0.create_links([s0[1], c0[1]])
+    # s0.create_links([c1[0], r0[0]])
+    # r0.create_links([s0[1], c0[1]])
 
     c0.create_links([ex0[0], r0[1]])
     ex0.create_links([c0[0]])
