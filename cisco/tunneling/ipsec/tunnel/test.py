@@ -240,12 +240,14 @@ def main():
     f"show crypto ipsec transform-set",
     f"show crypto map",
     f"show crypto session detail",
+    f"show ip route",
   ])
 
   iosv_2.execs([
     f"show crypto ipsec transform-set",
     f"show crypto map",
     f"show crypto session detail",
+    f"show ip route",
   ])
 
   pcap01.start(maxpackets=100)

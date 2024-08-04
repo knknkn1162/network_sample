@@ -27,6 +27,9 @@ make test
   + [ ] syslog
     + `logging host <ip_addr>`
     + `service timestamp log datetime msec`
+  + [ ] err disable
+    + [ ] check
+      + `show errdisable detect`
 + interface
   + [x] show info
     + `show interfaces <int>`
@@ -114,8 +117,9 @@ make test
     + [ ] `show access-lists [<num>/<label>]`
     + [ ] `show ip interface <int>`
 + ARP
-  + [x] address table
+  + [x] show address table
     + `show mac address-table`
+    + `show mac address-table aging-time`
 + serial
   + [ ] frame relay
     + [ ] initial setting

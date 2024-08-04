@@ -64,6 +64,7 @@ server_0.execs([
 # check if register MAC address or not(it should be true)
 iosvl2_0.execs([
   f"show mac address-table",
+  f"show mac address-table aging-time"
 ])
 
 server_0.execs([

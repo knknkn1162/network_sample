@@ -253,6 +253,7 @@ def main():
     f"show crypto isakmp sa",
     f"show crypto ipsec sa",
     f"show crypto session detail",
+    f"show ip route",
   ])
 
   iosv_2.execs([
@@ -260,6 +261,7 @@ def main():
     f"show crypto isakmp sa",
     f"show crypto ipsec sa",
     f"show crypto session detail",
+    f"show ip route",
   ])
 
   pcap01.start(maxpackets=100)
