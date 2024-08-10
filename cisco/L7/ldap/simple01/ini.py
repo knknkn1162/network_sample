@@ -3,14 +3,18 @@ pcap_file0 = "test0.pcap"
 pcap_file1 = "test1.pcap"
 
 class ldap:
-   admin_name = "admin"
-   tmp_admin_password = "pass01"
-   admin_password = "_uU89BhcsbdA"
-   config_password = "_uU89BhcsbdB"
-   domain_unit_names = ["example01", "com"]
-   domain_name = ".".join(domain_unit_names)
-   organization = "myorg"
    url = "ldapi:///"
+   class admin:
+      name = "admin"
+      domain_unit_names = ["example01", "com"]
+      domain_name = ".".join(domain_unit_names)
+      tmp_password = "pass01"
+      password = "_uU89BhcsbdA"
+      dn = f"cn={name},dc={domain_unit_names[0]},dc={domain_unit_names[1]}"
+      organization = "myorg"
+   class config:
+      password = "_uU89BhcsbdB"
+      dn = "cn=admin,cn=config"
 
 class sw_0:
    class port0:
