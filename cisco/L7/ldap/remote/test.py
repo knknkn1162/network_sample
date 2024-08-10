@@ -122,6 +122,7 @@ EOF
 
   # remote check
   ubuntu_1.execs([
+    f"ldapwhoami -x -vvv -H 'ldap://{ini.ubuntu_0.ens3.ip_addr.ip}' -D '{user01_dn}' -w '{ini.ldap.user01.password}'",
     f"ldapsearch -x -H 'ldap://{ini.ubuntu_0.ens3.ip_addr.ip}' -D '{user01_dn}' -w '{ini.ldap.user01.password}' -b '{user01_dn}'",
     # ldapi: ldap_sasl_bind(SIMPLE): Can't contact LDAP server (-1)
   ])
