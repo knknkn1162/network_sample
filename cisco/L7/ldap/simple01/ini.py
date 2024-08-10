@@ -6,6 +6,7 @@ class ldap:
    admin_name = "admin"
    tmp_admin_password = "pass01"
    admin_password = "_uU89BhcsbdA"
+   config_password = "_uU89BhcsbdB"
    domain_unit_names = ["example01", "com"]
    domain_name = ".".join(domain_unit_names)
    organization = "myorg"
