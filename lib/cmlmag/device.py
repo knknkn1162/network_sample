@@ -1,7 +1,14 @@
 from .structure.node import NodeType
-import logging
+import logging, sys
+import time
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+def seconds(secs):
+  print(f"wait for {secs}[s]")
+  sys.stdout.flush()
+  time.sleep(secs)
 
 class Device:
   def __init__(self, tb, name: str):
@@ -43,6 +50,14 @@ class Device:
         Exception(f"error execs @ ${cmd}")
     return res
   
+  def server_execs(self, cmds: list[list[str]], waits:int=2):
+    res = []
+    for lst in cmds:
+        for cmd in lst:
+          res.append(self.exec(cmd))
+        seconds(waits)
+    return res
+
   def vyos_configure(self, cmds: list[str], is_save:bool=False):
     save_option = ["save"] if is_save else []
     self.execs(["configure", *cmds, "commit", *save_option, "exit"])
