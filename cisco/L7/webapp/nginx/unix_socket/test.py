@@ -21,19 +21,6 @@ def main():
   ]])
   ubuntu_0.server_execs(cmds=[
     [
-      # -lk: When a connection is completed, listen for another one. Requires -l.
-      # -U: Use UNIX-domain sockets
-      # see https://man.openbsd.org/nc.1
-      # f"""
-      #   (echo -e "HTTP/1.0 200 Ok\n\nOK!") | sudo netcat -lkU {ini.nginx.socket_file} &
-      # """,
-      # wait until creating the unix-socket
-      # f"sleep 5",
-      # # write permission
-      # f"sudo chmod a+w {ini.nginx.socket_file}",
-      # f"sudo lsof {ini.nginx.socket_file}",
-    ],
-    [
       f"""cat <<EOF | sudo tee /etc/nginx/conf.d/{ini.nginx.conf_file}
 # proxy for unix socket
 server {{
@@ -69,6 +56,7 @@ EOF
       f"systemctl check nginx"
     ],
     [
+      # should appear welcome page
       f"curl http://localhost",
     ],
   ])
