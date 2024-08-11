@@ -55,7 +55,7 @@ def main():
     f"mkdir -p cacerts",
     f"cp server.crt ./cacerts",
     f"cd cacerts",
-    f"ln -s server.crt `$(openssl x509 -hash -noout -in server.crt).0`",
+    f"ln -s server.crt $(openssl x509 -hash -noout -in server.crt).0",
     f"cd -",
     f"openssl verify -verbose -CApath ./cacerts server.crt",
   ])
