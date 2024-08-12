@@ -2,11 +2,11 @@ from ipaddress import ip_interface
 pcap_file0 = "test0.pcap"
 pcap_file1 = "test1.pcap"
 
+resp_message = "<p>webapp ok</p>"
+
 class nginx:
    conf_file = "sample.conf"
    socket_file = "/var/run/unix.sock"
-   root_dir = "/www/dir"
-   index_file = "index.html"
 
 class ubuntu_0:
    class ens2:
