@@ -168,3 +168,4 @@ cython_debug/
 tmp.py
 ztest
 .DS_Store
+certs
